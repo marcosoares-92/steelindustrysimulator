@@ -38,6 +38,9 @@ class GlobalVars:
   # load models and store them
   kmeans_model, encoder_decoder_tf_model = load_models()
 
+  # Load original dataframe and allowed ranges for the variables:
+  df, possible_ranges = load_df_and_ranges()
+
   # Start variables with random values:
   lagging_current_reactive_power, leading_current_reactive_power, co2_tco2, lagging_current_power_factor, load_type = random_start(df)
   
@@ -51,9 +54,6 @@ class GlobalVars:
   timestamps, total_entries = create_timestamp_array(start_date, total_days, total_hours)
   day_of_week, weekstatus = create_dayofweek_weekstatus(timestamps)
   nsm = calculate_nsm(start_date, timestamps)
-
-  # Load original dataframe and allowed ranges for the variables:
-  df, possible_ranges = load_df_and_ranges()
 
   # Convert the input variables to arrays (one value for each timestamp)
   lagging_current_reactive_power, leading_current_reactive_power, co2_tco2, lagging_current_power_factor, load_type = convert_input_vars_to_arrays(total_entries, lagging_current_reactive_power, leading_current_reactive_power, co2_tco2, lagging_current_power_factor, load_type)
