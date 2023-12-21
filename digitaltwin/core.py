@@ -192,15 +192,14 @@ def run_simulation(var1, var2, var3, var4, var5, var6, var7, var8):
     
     
     """
-
+  
+  print(completion_msg)
   try:
         # only works in Jupyter Notebook:
         from IPython.display import display
-        display(completion_msg)
         display(sim_df)
             
   except: # regular mode
-        print(completion_msg)
         print(sim_df)
 
 

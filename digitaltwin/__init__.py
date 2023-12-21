@@ -154,10 +154,5 @@ def digitaltwin_start_msg(PT = True):
     if (PT):
         start_msg = start_msg_pt
 
-    try:
-        # only works in Jupyter Notebook:
-        from IPython.display import display
-        display(start_msg)
-            
-    except: # regular mode
-        print(start_msg)
+    print("\n")
+    print(start_msg)
