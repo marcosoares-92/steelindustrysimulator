@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import shutil
 
 from .idsw.datafetch.pipes import import_export_model_list_dict
 from .idsw.modelling.preparetensors import separate_and_prepare_features_and_responses
@@ -12,6 +13,12 @@ def load_models():
   start_simulation() (__init__ module) properly run, assuring that the directories are
   saved in the correct path.
   """
+
+  # Move the directory with TensorFlow model to the root directory.
+  # If an error occurs during the decompression, the saved model in the folder will be loaded.
+  src = 'steelindustrysimulator/digitaltwin/data/tmp'
+  dst = ''
+  shutil.move(src, dst)
 
   # Shared variables
   ACTION = 'import'
@@ -140,7 +147,7 @@ def rescale_response(predicted_values):
 def prediction_pipeline(encoder_decoder_tf_model, model_df, df):
   """Run full pipeline of preparing tensors, getting the model predictions and reconverting it
       to the appropriate kWh scale"""
-      
+
   X, RESPONSE_COLUMNS = get_tensor_for_simulation(model_df)
   model_df = get_model_predictions(encoder_decoder_tf_model, X, RESPONSE_COLUMNS, model_df)
   scaled_predictions = model_df['y_pred_usage_kwh_scaled']
