@@ -139,7 +139,8 @@ def rescale_response(predicted_values):
 
 def prediction_pipeline(encoder_decoder_tf_model, model_df, df):
   """Run full pipeline of preparing tensors, getting the model predictions and reconverting it
-  to the appropriate kWh scale""""
+      to the appropriate kWh scale"""
+      
   X, RESPONSE_COLUMNS = get_tensor_for_simulation(model_df)
   model_df = get_model_predictions(encoder_decoder_tf_model, X, RESPONSE_COLUMNS, model_df)
   scaled_predictions = model_df['y_pred_usage_kwh_scaled']
