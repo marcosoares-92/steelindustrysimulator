@@ -33,7 +33,7 @@ def load_models():
   os.makedirs("tmp/", exist_ok = True)
   shutil.copytree(src, dst)
   """
-
+  
   # Shared variables
   ACTION = 'import'
   OBJECTS_MANIPULATED = 'model_only'
@@ -53,7 +53,7 @@ def load_models():
   model_path = "steelindustrysimulator/digitaltwin/data/encoder_decoder_tf_model/saved_model"
   encoder_decoder_tf_model = tf.keras.models.load_model(model_path)
   print(f"Keras/TensorFlow model successfully imported from {model_path}.")
-  
+
   return kmeans_model, encoder_decoder_tf_model
 
 
