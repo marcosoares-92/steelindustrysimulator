@@ -79,12 +79,12 @@ def create_timestamp_array(start_date, total_days, total_hours):
   return timestamps, total_entries
 
 
-def check_weekstatus(day_name):
+def check_weekstatus(day_of_week):
   """Verify if the day is weekday or weekend"""
-  if day_name in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']:
+  if day_of_week in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']:
     return 'Weekday'
   
-  elif day_name in ['Saturday', 'Sunday']:
+  elif day_of_week in ['Saturday', 'Sunday']:
     return 'Weekend'
 
 
@@ -103,9 +103,9 @@ def create_dayofweek_weekstatus(timestamps):
   
   # Get array of day names, called day_of_week:
   day_of_week = np.array([time.day_name() for time in timestamps])
-  # Create a list mapping the check_weekstatus function to each day_name,
+  # Create a list mapping the check_weekstatus function to each day_of_week,
   # i.e., apply the function to each element of the array. Then, convert to array:
-  weekstatus = np.array(list(map(check_weekstatus, day_name)))
+  weekstatus = np.array(list(map(check_weekstatus, day_of_week)))
 
   return day_of_week, weekstatus
 
