@@ -17,10 +17,10 @@ def load_models():
 
   # Move the directory with TensorFlow model to the root directory.
   # If an error occurs during the decompression, the saved model in the folder will be loaded.
-  src = 'steelindustrysimulator/digitaltwin/data/tmp/*'
+  src = 'steelindustrysimulator/digitaltwin/data/tmp/'
   dst = 'tmp'
   os.makedirs("tmp/", exist_ok = True)
-  shutil.move(src, dst)
+  shutil.copytree(src, dst)
 
   # Shared variables
   ACTION = 'import'
