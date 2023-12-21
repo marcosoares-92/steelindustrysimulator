@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import os
 import shutil
 
 from .idsw.datafetch.pipes import import_export_model_list_dict
@@ -16,8 +17,9 @@ def load_models():
 
   # Move the directory with TensorFlow model to the root directory.
   # If an error occurs during the decompression, the saved model in the folder will be loaded.
-  src = 'steelindustrysimulator/digitaltwin/data/tmp'
-  dst = ''
+  src = 'steelindustrysimulator/digitaltwin/data/tmp/*'
+  dst = 'tmp'
+  os.makedirs("tmp/", exist_ok = True)
   shutil.move(src, dst)
 
   # Shared variables
