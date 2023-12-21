@@ -61,48 +61,47 @@ def check_inputs(dataset):
 
 def encode_weekdays(dataset):
   """Encode the weekdays from the dataframe."""
-
- DATASET = dataset
- COLUMN_TO_ANALYZE = 'day_of_week'
- LIST_OF_DICTIONARIES_WITH_ORIGINAL_STRINGS_AND_REPLACEMENTS = [
-      
-      {'original_string': 'Monday', 'new_string': '1'}, 
-      {'original_string': 'Tuesday', 'new_string': '2'}, 
-      {'original_string': 'Wednesday', 'new_string': '3'}, 
-      {'original_string': 'Thursday', 'new_string': '4'}, 
-      {'original_string': 'Friday', 'new_string': '5'}, 
-      {'original_string': 'Saturday', 'new_string': '6'}, 
-      {'original_string': 'Sunday', 'new_string': '7'}, 
-      
-  ]
-  CREATE_NEW_COLUMN = False
-  NEW_COLUMN_SUFFIX = '_stringReplaced'
-  dataset = switch_strings (df = DATASET, column_to_analyze = COLUMN_TO_ANALYZE, list_of_dictionaries_with_original_strings_and_replacements = LIST_OF_DICTIONARIES_WITH_ORIGINAL_STRINGS_AND_REPLACEMENTS, create_new_column = CREATE_NEW_COLUMN, new_column_suffix = NEW_COLUMN_SUFFIX)
   
-  dataset['day_of_week'] = dataset['day_of_week'].astype('int')
+  DATASET = dataset
+  COLUMN_TO_ANALYZE = 'day_of_week'
+  LIST_OF_DICTIONARIES_WITH_ORIGINAL_STRINGS_AND_REPLACEMENTS = [
+        
+        {'original_string': 'Monday', 'new_string': '1'}, 
+        {'original_string': 'Tuesday', 'new_string': '2'}, 
+        {'original_string': 'Wednesday', 'new_string': '3'}, 
+        {'original_string': 'Thursday', 'new_string': '4'}, 
+        {'original_string': 'Friday', 'new_string': '5'}, 
+        {'original_string': 'Saturday', 'new_string': '6'}, 
+        {'original_string': 'Sunday', 'new_string': '7'}, 
+        ]
 
-  return dataset
+    CREATE_NEW_COLUMN = False
+    NEW_COLUMN_SUFFIX = '_stringReplaced'
+    dataset = switch_strings (df = DATASET, column_to_analyze = COLUMN_TO_ANALYZE, list_of_dictionaries_with_original_strings_and_replacements = LIST_OF_DICTIONARIES_WITH_ORIGINAL_STRINGS_AND_REPLACEMENTS, create_new_column = CREATE_NEW_COLUMN, new_column_suffix = NEW_COLUMN_SUFFIX)
+    
+    dataset['day_of_week'] = dataset['day_of_week'].astype('int')
+
+    return dataset
 
 
 def encode_weekstatus(dataset):
   """Encode the weekstatus from the dataframe."""
+  DATASET = dataset
+  COLUMN_TO_ANALYZE = 'weekstatus'
+  LIST_OF_DICTIONARIES_WITH_ORIGINAL_STRINGS_AND_REPLACEMENTS = [
+        
+      {'original_string': 'Weekday', 'new_string': '1'}, 
+      {'original_string': 'Weekend', 'new_string': '0'}, 
+        
+    ]
 
- DATASET = dataset
- COLUMN_TO_ANALYZE = 'weekstatus'
- LIST_OF_DICTIONARIES_WITH_ORIGINAL_STRINGS_AND_REPLACEMENTS = [
-      
-    {'original_string': 'Weekday', 'new_string': '1'}, 
-    {'original_string': 'Weekend', 'new_string': '0'}, 
-      
-  ]
+    CREATE_NEW_COLUMN = False
+    NEW_COLUMN_SUFFIX = '_stringReplaced'
+    dataset = switch_strings (df = DATASET, column_to_analyze = COLUMN_TO_ANALYZE, list_of_dictionaries_with_original_strings_and_replacements = LIST_OF_DICTIONARIES_WITH_ORIGINAL_STRINGS_AND_REPLACEMENTS, create_new_column = CREATE_NEW_COLUMN, new_column_suffix = NEW_COLUMN_SUFFIX)
+    
+    dataset['weekstatus'] = dataset['weekstatus'].astype('int')
 
-  CREATE_NEW_COLUMN = False
-  NEW_COLUMN_SUFFIX = '_stringReplaced'
-  dataset = switch_strings (df = DATASET, column_to_analyze = COLUMN_TO_ANALYZE, list_of_dictionaries_with_original_strings_and_replacements = LIST_OF_DICTIONARIES_WITH_ORIGINAL_STRINGS_AND_REPLACEMENTS, create_new_column = CREATE_NEW_COLUMN, new_column_suffix = NEW_COLUMN_SUFFIX)
-  
-  dataset['weekstatus'] = dataset['weekstatus'].astype('int')
-
-  return dataset
+    return dataset
 
 
 def add_frequencies(dataset):
