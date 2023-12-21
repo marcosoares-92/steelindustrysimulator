@@ -72,36 +72,34 @@ def encode_weekdays(dataset):
         {'original_string': 'Thursday', 'new_string': '4'}, 
         {'original_string': 'Friday', 'new_string': '5'}, 
         {'original_string': 'Saturday', 'new_string': '6'}, 
-        {'original_string': 'Sunday', 'new_string': '7'}, 
-        ]
+        {'original_string': 'Sunday', 'new_string': '7'}]
 
-    CREATE_NEW_COLUMN = False
-    NEW_COLUMN_SUFFIX = '_stringReplaced'
-    dataset = switch_strings (df = DATASET, column_to_analyze = COLUMN_TO_ANALYZE, list_of_dictionaries_with_original_strings_and_replacements = LIST_OF_DICTIONARIES_WITH_ORIGINAL_STRINGS_AND_REPLACEMENTS, create_new_column = CREATE_NEW_COLUMN, new_column_suffix = NEW_COLUMN_SUFFIX)
+  CREATE_NEW_COLUMN = False
+  NEW_COLUMN_SUFFIX = '_stringReplaced'
+  dataset = switch_strings (df = DATASET, column_to_analyze = COLUMN_TO_ANALYZE, list_of_dictionaries_with_original_strings_and_replacements = LIST_OF_DICTIONARIES_WITH_ORIGINAL_STRINGS_AND_REPLACEMENTS, create_new_column = CREATE_NEW_COLUMN, new_column_suffix = NEW_COLUMN_SUFFIX)
     
-    dataset['day_of_week'] = dataset['day_of_week'].astype('int')
+  dataset['day_of_week'] = dataset['day_of_week'].astype('int')
 
-    return dataset
+  return dataset
 
 
 def encode_weekstatus(dataset):
   """Encode the weekstatus from the dataframe."""
+
   DATASET = dataset
   COLUMN_TO_ANALYZE = 'weekstatus'
   LIST_OF_DICTIONARIES_WITH_ORIGINAL_STRINGS_AND_REPLACEMENTS = [
         
       {'original_string': 'Weekday', 'new_string': '1'}, 
-      {'original_string': 'Weekend', 'new_string': '0'}, 
-        
-    ]
+      {'original_string': 'Weekend', 'new_string': '0'}]
 
-    CREATE_NEW_COLUMN = False
-    NEW_COLUMN_SUFFIX = '_stringReplaced'
-    dataset = switch_strings (df = DATASET, column_to_analyze = COLUMN_TO_ANALYZE, list_of_dictionaries_with_original_strings_and_replacements = LIST_OF_DICTIONARIES_WITH_ORIGINAL_STRINGS_AND_REPLACEMENTS, create_new_column = CREATE_NEW_COLUMN, new_column_suffix = NEW_COLUMN_SUFFIX)
+  CREATE_NEW_COLUMN = False
+  NEW_COLUMN_SUFFIX = '_stringReplaced'
+  dataset = switch_strings (df = DATASET, column_to_analyze = COLUMN_TO_ANALYZE, list_of_dictionaries_with_original_strings_and_replacements = LIST_OF_DICTIONARIES_WITH_ORIGINAL_STRINGS_AND_REPLACEMENTS, create_new_column = CREATE_NEW_COLUMN, new_column_suffix = NEW_COLUMN_SUFFIX)
     
-    dataset['weekstatus'] = dataset['weekstatus'].astype('int')
+  dataset['weekstatus'] = dataset['weekstatus'].astype('int')
 
-    return dataset
+  return dataset
 
 
 def add_frequencies(dataset):
@@ -114,8 +112,7 @@ def add_frequencies(dataset):
                           {'value': 365.252400, 'unit': 'year'},
                           {'value': 1095.757200, 'unit': 'year'},
                           {'value': 1461.009600, 'unit': 'year'},
-                          {'value': 1826.262000, 'unit': 'year'},
-                          ]
+                          {'value': 1826.262000, 'unit': 'year'}]
 
   X_AXIS_ROTATION = 70
   Y_AXIS_ROTATION = 0
