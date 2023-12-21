@@ -166,7 +166,7 @@ def obtain_simulation_df(timestamps, lagging_current_reactive_power, leading_cur
     "leading_current_power_factor": leading_current_power_factor,
     "nsm": nsm,
     "weekstatus": weekstatus,
-    "day_of_week" day_of_week,
+    "day_of_week": day_of_week,
     "load_type": load_type
 
   })
