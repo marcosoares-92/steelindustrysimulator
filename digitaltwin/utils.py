@@ -31,7 +31,7 @@ def random_start(df):
 
   # Finally, use this sample to collect data for starting:
   lagging_current_reactive_power = df_sample['Lagging_Current_Reactive.Power_kVarh_mean']
-  leading_current_reactive_power = df_sample['Leading_Current_Reactive_Power']
+  leading_current_reactive_power = df_sample['Leading_Current_Reactive_Power_kVarh_mean']
   co2_tco2 = df_sample['CO2(tCO2)_mean']
   lagging_current_power_factor = df_sample['Lagging_Current_Power_Factor_mean']
   load_type = df_sample['Load_Type_mode']
