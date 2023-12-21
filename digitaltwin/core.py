@@ -148,7 +148,7 @@ def run_simulation(var1, var2, var3, var4, var5, var6, var7, var8):
   # Get initial dataframe with user defined inputs:
   sim_df = update_with_inputs(var1, var2, var3, var4, var5, var6, var7, var8)
   # Run simulation pipeline:
-  sim_df = simulation_pipeline(sim_df, GlobalVars.kmeans_model, GlobalVars.encoder_decoder_tf_model)
+  sim_df = simulation_pipeline(sim_df, GlobalVars.possible_ranges, GlobalVars.kmeans_model, GlobalVars.encoder_decoder_tf_model)
   # Update on GlobalVars:
   GlobalVars.sim_df = sim_df
 

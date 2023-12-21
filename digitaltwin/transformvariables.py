@@ -5,20 +5,17 @@ from .idsw.datafetch.core import InvalidInputsError
 from .idsw.etl.strings import switch_strings
 from .idsw.etl.transform import (get_frequency_features, feature_scaling)
 
-from .core import GlobalVars
-
 from .models import (
   calculate_leading_current_power_factor,
   create_clusters,
   prediction_pipeline
 )
 
-def check_inputs(dataset):
+def check_inputs(dataset, possible_ranges):
   """Check if all inputs are within the valid ranges.
   If they are, apply linear correlation to calculate the
   leading current power factor"""
   
-  possible_ranges = GlobalVars.possible_ranges
   checked_variables = ['lagging_current_reactive_power', 'leading_current_reactive_power',
                       'co2_tco2', 'lagging_current_power_factor']
   
@@ -190,13 +187,13 @@ def scale_features(dataset):
   return dataset
 
 
-def simulation_pipeline(dataset, kmeans_model, encoder_decoder_tf_model):
+def simulation_pipeline(dataset, possible_ranges, kmeans_model, encoder_decoder_tf_model):
   """Run the full data transformation and simulation pipeline."""
 
   # Create copy to manipulate without risks of losing data:
   df = dataset.copy(deep = True)
   # Run the functions:
-  df = check_inputs(df)
+  df = check_inputs(dataset, possible_ranges)
   
   # Now, get the dataframe that will be used for feeding the model:
   model_df = create_clusters(kmeans_model, df)
