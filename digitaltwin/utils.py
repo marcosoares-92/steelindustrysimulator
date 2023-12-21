@@ -4,6 +4,28 @@ import numpy as np
 import pandas as pd
 
 
+def load_df_and_ranges():
+  """Load original dataframe used for modelling and ranges allowed for each input variable
+  Warning: this function will only work if the sequence of commands in the function
+  start_simulation() (__init__ module) properly run, assuring that the directories are
+  saved in the correct path.
+  """
+  
+  # Read the Pandas dataframe used for training for retrieving operation ranges:
+  df = pd.read_csv('steelindustrysimulator/digitaltwin/data/raw_data_by_hour.csv')
+
+  possible_ranges = {
+
+    'lagging_current_reactive_power':{'min': df['Lagging_Current_Reactive.Power_kVarh_mean'].min(), 'max':df['Lagging_Current_Reactive.Power_kVarh_mean'].max()},
+    'leading_current_reactive_power':{'min': df['Leading_Current_Reactive_Power_kVarh_mean'].min(), 'max':df['Leading_Current_Reactive_Power_kVarh_mean'].max()},
+    'co2_tco2':{'min': df['CO2(tCO2)_mean'].min(), 'max':df['CO2(tCO2)_mean'].max()},
+    'lagging_current_power_factor':{'min': df['Lagging_Current_Power_Factor_mean'].min(), 'max':df['Lagging_Current_Power_Factor_mean'].max()},
+  
+  }
+
+  return df, possible_ranges
+
+
 def random_start(df):
   """Define random values for starting the input parameters.
      These values are obtained by searching for a random entry on the base-dataset.
@@ -30,11 +52,14 @@ def random_start(df):
   # If an integer was passed, a single-column dataframe would be returned.
 
   # Finally, use this sample to collect data for starting:
-  lagging_current_reactive_power = df_sample['Lagging_Current_Reactive.Power_kVarh_mean']
-  leading_current_reactive_power = df_sample['Leading_Current_Reactive_Power_kVarh_mean']
-  co2_tco2 = df_sample['CO2(tCO2)_mean']
-  lagging_current_power_factor = df_sample['Lagging_Current_Power_Factor_mean']
-  load_type = df_sample['Load_Type_mode']
+  # Use .values attribute to obtain only the values stored in the Pandas Series
+  lagging_current_reactive_power = df_sample['Lagging_Current_Reactive.Power_kVarh_mean'].values
+  # df_sample is a pd.DataFrame, whereas df_sample['Lagging_Current_Reactive.Power_kVarh_mean']
+  # is a pd.Series object. So, both store column names and types, as well as row indices.
+  leading_current_reactive_power = df_sample['Leading_Current_Reactive_Power_kVarh_mean'].values
+  co2_tco2 = df_sample['CO2(tCO2)_mean'].values
+  lagging_current_power_factor = df_sample['Lagging_Current_Power_Factor_mean'].values
+  load_type = df_sample['Load_Type_mode'].values
 
   return lagging_current_reactive_power, leading_current_reactive_power, co2_tco2, lagging_current_power_factor, load_type
 
@@ -111,28 +136,6 @@ def calculate_nsm(start_date, timestamps):
   nsm = np.array([timedelta.total_seconds() for timedelta in timedeltas])
 
   return nsm
-
-
-def load_df_and_ranges():
-  """Load original dataframe used for modelling and ranges allowed for each input variable
-  Warning: this function will only work if the sequence of commands in the function
-  start_simulation() (__init__ module) properly run, assuring that the directories are
-  saved in the correct path.
-  """
-  
-  # Read the Pandas dataframe used for training for retrieving operation ranges:
-  df = pd.read_csv('steelindustrysimulator/digitaltwin/data/raw_data_by_hour.csv')
-
-  possible_ranges = {
-
-    'lagging_current_reactive_power':{'min': df['Lagging_Current_Reactive.Power_kVarh_mean'].min(), 'max':df['Lagging_Current_Reactive.Power_kVarh_mean'].max()},
-    'leading_current_reactive_power':{'min': df['Leading_Current_Reactive_Power_kVarh_mean'].min(), 'max':df['Leading_Current_Reactive_Power_kVarh_mean'].max()},
-    'co2_tco2':{'min': df['CO2(tCO2)_mean'].min(), 'max':df['CO2(tCO2)_mean'].max()},
-    'lagging_current_power_factor':{'min': df['Lagging_Current_Power_Factor_mean'].min(), 'max':df['Lagging_Current_Power_Factor_mean'].max()},
-  
-  }
-
-  return df, possible_ranges
 
 
 def convert_input_vars_to_arrays(total_entries, lagging_current_reactive_power, leading_current_reactive_power, co2_tco2, lagging_current_power_factor, load_type):
