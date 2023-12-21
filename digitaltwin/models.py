@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
-import os
-import shutil
+import tensorflow as tf
 
 from .idsw.datafetch.pipes import import_export_model_list_dict
 from .idsw.modelling.preparetensors import separate_and_prepare_features_and_responses
@@ -13,14 +12,27 @@ def load_models():
   Warning: this function will only work if the sequence of commands in the function
   start_simulation() (__init__ module) properly run, assuring that the directories are
   saved in the correct path.
+
+  Since Colab may impose user restrictions regarding to move or copy files, we could have
+  problems on the step of decompressing the model. Thus, we copy the TensorFlow module
+  directly from the GitHub repository and do not use IDSW function to load it.
+  Instead, we apply only the specific part used for loading a tf model.
+
+  Notice that the model is saved on the GitHub subdirectory 'encoder_decoder_tf_model/saved_model'
   """
 
   # Move the directory with TensorFlow model to the root directory.
   # If an error occurs during the decompression, the saved model in the folder will be loaded.
+  """
+  With appropriate permissions, user could move decompressed files using this:
+  
+  import os
+  import shutil
   src = 'steelindustrysimulator/digitaltwin/data/tmp/'
   dst = 'tmp'
   os.makedirs("tmp/", exist_ok = True)
   shutil.copytree(src, dst)
+  """
 
   # Shared variables
   ACTION = 'import'
@@ -38,17 +50,9 @@ def load_models():
   kmeans_model = import_export_model_list_dict (action = ACTION, objects_manipulated = OBJECTS_MANIPULATED, model_file_name = MODEL_FILE_NAME, dictionary_or_list_file_name = DICTIONARY_OR_LIST_FILE_NAME, directory_path = DIRECTORY_PATH, model_type = MODEL_TYPE, dict_or_list_to_export = DICT_OR_LIST_TO_EXPORT, model_to_export = MODEL_TO_EXPORT, use_colab_memory = USE_COLAB_MEMORY) 
 
   # Deep learning encoder-decoder model:
-  try:
-    # Try importing the general tensorflow file
-    MODEL_FILE_NAME = 'saved_model'
-    MODEL_TYPE = 'tensorflow_general'
-    encoder_decoder_tf_model = import_export_model_list_dict (action = ACTION, objects_manipulated = OBJECTS_MANIPULATED, model_file_name = MODEL_FILE_NAME, dictionary_or_list_file_name = DICTIONARY_OR_LIST_FILE_NAME, directory_path = DIRECTORY_PATH, model_type = MODEL_TYPE, dict_or_list_to_export = DICT_OR_LIST_TO_EXPORT, model_to_export = MODEL_TO_EXPORT, use_colab_memory = USE_COLAB_MEMORY) 
-
-  except:
-    # Access .keras extension:
-    MODEL_FILE_NAME = 'encoder_decoder_tf_model'
-    MODEL_TYPE = 'keras'
-    encoder_decoder_tf_model = import_export_model_list_dict (action = ACTION, objects_manipulated = OBJECTS_MANIPULATED, model_file_name = MODEL_FILE_NAME, dictionary_or_list_file_name = DICTIONARY_OR_LIST_FILE_NAME, directory_path = DIRECTORY_PATH, model_type = MODEL_TYPE, dict_or_list_to_export = DICT_OR_LIST_TO_EXPORT, model_to_export = MODEL_TO_EXPORT, use_colab_memory = USE_COLAB_MEMORY)
+  model_path = "steelindustrysimulator/digitaltwin/data/encoder_decoder_tf_model/saved_model"
+  encoder_decoder_tf_model = tf.keras.models.load_model(model_path)
+  print(f"Keras/TensorFlow model successfully imported from {model_path}.")
   
   return kmeans_model, encoder_decoder_tf_model
 

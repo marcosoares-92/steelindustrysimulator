@@ -126,7 +126,7 @@ def load_df_and_ranges():
   possible_ranges = {
 
     'lagging_current_reactive_power':{'min': df['Lagging_Current_Reactive.Power_kVarh_mean'].min(), 'max':df['Lagging_Current_Reactive.Power_kVarh_mean'].max()},
-    'leading_current_reactive_power':{'min': df['Leading_Current_Reactive_Power'].min(), 'max':df['Leading_Current_Reactive_Power'].max()},
+    'leading_current_reactive_power':{'min': df['Leading_Current_Reactive_Power_kVarh_mean'].min(), 'max':df['Leading_Current_Reactive_Power_kVarh_mean'].max()},
     'co2_tco2':{'min': df['CO2(tCO2)_mean'].min(), 'max':df['CO2(tCO2)_mean'].max()},
     'lagging_current_power_factor':{'min': df['Lagging_Current_Power_Factor_mean'].min(), 'max':df['Lagging_Current_Power_Factor_mean'].max()},
   

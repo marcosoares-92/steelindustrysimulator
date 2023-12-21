@@ -134,7 +134,7 @@ def digitaltwin_start_msg(PT = True):
              - Potência reativa de corrente principal, em kVarh;
              - tCO2(CO2), em ppm;
              - Fator de potência da corrente atrasada, em %;
-             - Tipo de Carga: Carga Leve, Carga Média, Carga Máxima.
+             - Tipo de Carga: Carga Leve ('Light_Load'), Carga Média ('Medium_Load'), Carga Máxima ('Maximum_Load').
 
 
          ## E obterá a variável Response:
