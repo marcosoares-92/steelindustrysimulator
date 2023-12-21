@@ -89,7 +89,7 @@ def update_with_inputs(var1, var2, var3, var4, var5, var6, var7, var8):
   # Several global variables are arrays with constant values. Since we cannot compae the full
   # array with a value, due to ambiguity, let's compare only its 1st value.
   if ((GlobalVars.start_date != start_date) | (GlobalVars.total_days != total_days) | 
-      (GlobalVars.total_days != total_hours) | (GlobalVars.lagging_current_reactive_power[0] != var4) | 
+      (GlobalVars.total_hours != total_hours) | (GlobalVars.lagging_current_reactive_power[0] != var4) | 
       (GlobalVars.leading_current_reactive_power[0] != var5) | (GlobalVars.co2_tco2[0] != var6) | 
       (GlobalVars.lagging_current_power_factor[0] != var7) | (GlobalVars.load_type[0] != var8)):
 
