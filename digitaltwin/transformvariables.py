@@ -19,8 +19,6 @@ def check_inputs(dataset, possible_ranges):
   checked_variables = ['lagging_current_reactive_power', 'leading_current_reactive_power',
                       'co2_tco2', 'lagging_current_power_factor']
   
-  total_entries = len(dataset) # total of entries to check
-
   for var in checked_variables:
     # Check if the variables are within the valid range. If they are not, raise an error:
     var_min = possible_ranges[var]['min']
@@ -29,19 +27,13 @@ def check_inputs(dataset, possible_ranges):
     # Create an array containing only the analyzed variable:
     var_array = np.array(dataset[var])
     """
-    Suppose var_array = np.array([1, 2, 3, 4])
-    if var_min = 2
-    (var_array >= 2) will return array([False,  True,  True,  True])
-    False is automatically converted to 0; True is converted to 1. Thus,
-    np.sum(var_array >= 2) returns 3.
-    Notice that 3 < len(var_array), which is 4. So, if the sum is different
-    than the length, the condition is not verified for all elements, so the error must
-    be raised.
+    The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+    to check if one or all elements from an array satisfy a condition.
     """
-    if (np.sum(var_array >= var_min) != total_entries):
+    if (var_array.any() < var_min): # check if there is at least one element < var_min
       raise InvalidInputsError(f"The minimum value allowed for variable {var} is {var_min}, but the simulation found at least one value lower than this.")
     
-    elif (np.sum(var_array <= var_max) != total_entries):
+    elif (var_array.any() > var_max): # check if there is at least one element > var_max
       raise InvalidInputsError(f"The maximum value allowed for variable {var} is {var_max}, but the simulation found at least one value higher than this.")
     
     else:
