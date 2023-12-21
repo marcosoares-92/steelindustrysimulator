@@ -10,7 +10,6 @@ marco.soares@bayer.com
 """
 
 from .core import (
-    GlobalVars,
     run_simulation,
     visualize_usage_kwh,
     download_excel_with_data

@@ -16,7 +16,8 @@ def check_inputs(dataset, possible_ranges):
   If they are, apply linear correlation to calculate the
   leading current power factor"""
   
-  checked_variables = ['lagging_current_reactive_power', 'leading_current_reactive_power',
+  checked_variables = ['lagging_current_reactive_power_kvarh', 
+                      'leading_current_reactive_power_kvarh',
                       'co2_tco2', 'lagging_current_power_factor']
   
   for var in checked_variables:
