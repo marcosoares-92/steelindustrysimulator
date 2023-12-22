@@ -121,7 +121,9 @@ def scale_features(dataset):
 
   DATASET = dataset
   SUBSET_OF_FEATURES_TO_SCALE = ['lagging_current_reactive_power_kvarh',
-        'leading_current_reactive_power_kvarh', 'co2_tco2', 'usage_kwh']
+        'leading_current_reactive_power_kvarh', 'co2_tco2']
+  # Notice that the response usage_kwh is not in the dataset yet, since it will
+  # be predicted.
 
   MODE = 'standard'
   SCALE_WITH_NEW_PARAMS = False
