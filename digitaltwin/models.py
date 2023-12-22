@@ -59,29 +59,6 @@ def load_models():
   return kmeans_model, encoder_decoder_tf_model
 
 
-def calculate_leading_current_power_factor(leading_current_reactive_power, possible_ranges):
-  """Apply the internal linear correlation:
-      'Leading_Current_Reactive_Power_kVarh_mean'
-      Linear regression summary for Leading_Current_Power_Factor_mean:
-
-      'y = -0.23*x + 23.09'
-      'R²_lin_reg = 0.9071'
-  """
-  leading_current_reactive_power = np.array(leading_current_reactive_power)
-  leading_current_power_factor = leading_current_reactive_power*(-0.23) + 23.09
-
-  # Add a random noise to this feature:
-  std = possible_ranges['leading_current_power_factor']['std']
-  leading_current_power_factor = random_noise(leading_current_power_factor, std)
-
-  # Check if array contains a value above the max or below the minimum.
-  var_max = possible_ranges['leading_current_power_factor']['max']
-  var_min = possible_ranges['leading_current_power_factor']['min']
-  leading_current_power_factor = correct_vals_out_of_bounds(leading_current_power_factor, var_min, var_max)
-  
-  return leading_current_power_factor
-
-
 def create_clusters(kmeans_model, dataset):
   """Associate the electric state to one of the clusters"""
   # Create a deep copy for not losing data:
