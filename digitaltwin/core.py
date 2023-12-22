@@ -153,14 +153,20 @@ def run_simulation(var1, var2, var3, var4, var5, var6, var7, var8):
   simulation_counter = GlobalVars.simulation_counter
   # Get list exported_tables:
   exported_tables = GlobalVars.exported_tables
-  # Get start date:
-  start_date = GlobalVars.start_date
+  # Get a date now to differentiate from others
+  conclusion_time = pd.Timestamp(datetime.now())
+
   # Obtain sheet name:
-  sheet_name = "sim" + str(simulation_counter) + "_" + str(start_date)
+  # Apply timestamp() method to convert the timestamp to POSIX timestamp as float
+  # https://pandas.pydata.org/docs/reference/api/pandas.Timestamp.timestamp.html#pandas.Timestamp.timestamp
+  # It will guarantee that each sheet is unique. Also, hours in 00:00:00 format cannot
+  # be used as sheet names, due to the ":" non-allowed character.
+  sheet_name = "sim" + str(simulation_counter) + "_" + str(conclusion_time.timestamp())
   
   # Get a dictionary for exporting the table:
   table_dict = {'dataframe_obj_to_be_exported': sim_df, 
-                    'excel_sheet_name': sheet_name}
+                    'excel_sheet_name': sheet_name,
+                    'conclusion_time': conclusion_time}
 
   # Append the dictionary on the list of exported tables:
   exported_tables.append(table_dict)
@@ -187,7 +193,8 @@ def run_simulation(var1, var2, var3, var4, var5, var6, var7, var8):
 
 
     START = {GlobalVars.start_date}
-    SIMULATION #{simulation_counter} 
+    CONCLUSION = {conclusion_time}
+    SIMULATION #{simulation_counter}: IDENTIFIER {conclusion_time.timestamp()} 
     SIMULATION RUN FOR {GlobalVars.total_days} DAYS AND {GlobalVars.total_hours} HOURS.
 
 
@@ -224,7 +231,7 @@ def visualize_usage_kwh(export_images = True):
                             ENERGY CONSUME (kWh)
 
 
-      SIMULATION DATA IN {table_dict['excel_sheet_name']}
+      SIMULATION DATA STORED IN {table_dict['excel_sheet_name']}
       
       ------------------------------------------------------------------------
 
@@ -272,12 +279,12 @@ def download_excel_with_data():
   """Download Excel file containing all the tables generated from simulations."""
   
   # Create Excel file and store it in Colab's memory:
-  FILE_NAME_WITHOUT_EXTENSION = "datasets"
+  FILE_NAME_WITHOUT_EXTENSION = "steelindustrysimulations"
   EXPORTED_TABLES = GlobalVars.exported_tables
   FILE_DIRECTORY_PATH = ""
   export_pd_dataframe_as_excel (file_name_without_extension = FILE_NAME_WITHOUT_EXTENSION, exported_tables = EXPORTED_TABLES, file_directory_path = FILE_DIRECTORY_PATH)
 
   # Download the file:
   ACTION = 'download'
-  FILE_TO_DOWNLOAD_FROM_COLAB = "datasets.xlsx"
+  FILE_TO_DOWNLOAD_FROM_COLAB = "steelindustrysimulations.xlsx"
   upload_to_or_download_file_from_colab (action = ACTION, file_to_download_from_colab = FILE_TO_DOWNLOAD_FROM_COLAB)

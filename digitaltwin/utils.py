@@ -170,9 +170,8 @@ def calculate_nsm(start_date, timestamps):
   
   NSM: Number of Seconds from midnight: continuous variable measured in s
 
-  pd.Timestamp.date() method returns a datetime object with same year, month and day.
-  Applying again the function pd.Timestamp to this object returns a Timestamp at 00:00:00.
-  https://pandas.pydata.org/docs/reference/api/pandas.Timestamp.date.html#pandas.Timestamp.date
+  Timestamp.normalize() method returns a Timestamp object at the same date, but at midnight.
+  # https://pandas.pydata.org/docs/reference/api/pandas.Timestamp.normalize.html#pandas.Timestamp.normalize
 
   So, the difference between a timestamp and this last one will be a timedelta in relation
   to midnight. In seconds, the value is the NSM.
@@ -181,11 +180,8 @@ def calculate_nsm(start_date, timestamps):
   https://pandas.pydata.org/docs/reference/api/pandas.Timedelta.total_seconds.html#pandas.Timedelta.total_seconds
   """
   
-  # Get midnight timestamp correspondent to start_date:
-  midnight = pd.Timestamp(pd.Timestamp(start_date).date())
-
   # get a list of timedeltas, subtracting each timestamp from midnight:
-  timedeltas = [(timestamp - midnight) for timestamp in timestamps]
+  timedeltas = [(timestamp - timestamp.normalize()) for timestamp in timestamps]
   # apply total_seconds method to each element and convert to np.ndarray.
   # It could be a single step, but the syntax would be harder to read:
   nsm = np.array([timedelta.total_seconds() for timedelta in timedeltas])

@@ -239,11 +239,10 @@ def kmeans_elbow_method (X_tensor, max_number_of_clusters_to_test = 100, number_
 
         #Export the file to this new path:
         # The extension will be automatically added by the savefig method:
-        plt.savefig(new_file_path, dpi = png_resolution_dpi, quality = 100, format = 'png', transparent = False) 
-        #quality could be set from 1 to 100, where 100 is the best quality
+        plt.savefig(new_file_path, dpi = png_resolution_dpi, format = 'png', transparent = False) 
+        # https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.savefig.html
         #format (str, supported formats) = 'png', 'pdf', 'ps', 'eps' or 'svg'
         #transparent = True or False
-        # For other parameters of .savefig method, check https://indianaiproduction.com/matplotlib-savefig/
         print (f"Figure exported as \'{new_file_path}.png\'. Any previous file in this root path was overwritten.")
 
     #Set image size (x-pixels, y-pixels) for printing in the notebook's cell:
