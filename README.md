@@ -4,9 +4,9 @@
 #### The digital twin is designed to reproduce the behavior from a DAEWOO Steel Co. Ltd facility in Gwangyang, South Korea, which made its data public.
 
 
-	Acess user interface in:
+`Acess user interface in:`
 
-`https://colab.research.google.com/github/marcosoares-92/steelindustrysimulator/blob/main/steelindustry_digitaltwin.ipynb`
+	https://colab.research.google.com/github/marcosoares-92/steelindustrysimulator/blob/main/steelindustry_digitaltwin.ipynb`
 
 
 - Attention: this simulator will only run when in a directory called 'steelindustrysimulator'.
