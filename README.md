@@ -6,16 +6,15 @@
 
 `Acess user interface in:`
 
-	https://colab.research.google.com/github/marcosoares-92/steelindustrysimulator/blob/main/steelindustry_digitaltwin.ipynb`
+	https://colab.research.google.com/github/marcosoares-92/steelindustrysimulator/blob/main/steelindustry_digitaltwin.ipynb
 
 
-- Attention: this simulator will only run when in a directory called 'steelindustrysimulator'.
+- `Attention:` this simulator will only run when in a directory called 'steelindustrysimulator'.
 
-- Contact:
-
-	Marco Cesar Prado Soares, Data Scientist Specialist @ Bayer Crop Science LATAM
-	marcosoares.feq@gmail.com
-	marco.soares@bayer.com
+`Contact:`
+- Marco Cesar Prado Soares, Data Scientist Specialist @ Bayer Crop Science LATAM
+	- marcosoares.feq@gmail.com
+	- marco.soares@bayer.com
 
 ## This simulator applies advanced AI (deep learning) technologies to reproduce the operation of a small-scale steel industry.
 
