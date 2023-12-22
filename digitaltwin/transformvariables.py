@@ -11,10 +11,20 @@ from .models import (
   prediction_pipeline
 )
 
-def check_inputs(dataset, possible_ranges):
-  """Check if all inputs are within the valid ranges.
-  If they are, apply linear correlation to calculate the
-  leading current power factor"""
+from .utils import (random_noise, correct_vals_out_of_bounds)
+
+
+def add_variation(dataset, possible_ranges):
+  """ Add the random noise to each continous input to add a source
+  of variation.
+  - Check if all inputs are within the valid ranges. If a value is outside
+  the boundaries, correct it. Notice that the boundaries force the simulated
+  data to get closer to the distorted distributions: if a boundary is close to
+  the mean value, then there will be more data on the other side of the distribution,
+  introducing skewness and kurtosis.
+  - Finally, apply the linear correlation to calculate the
+  leading current power factor, and add the variation to this feature.
+  """
   
   checked_variables = ['lagging_current_reactive_power_kvarh', 
                       'leading_current_reactive_power_kvarh',
@@ -22,23 +32,18 @@ def check_inputs(dataset, possible_ranges):
   
   for var in checked_variables:
     # Check if the variables are within the valid range. If they are not, raise an error:
+    var_array = np.array(dataset[var])
     var_min = possible_ranges[var]['min']
     var_max = possible_ranges[var]['max']
+    std = possible_ranges[var]['std']
+    
+    # Add a random noise to this feature:
+    var_array = random_noise(var_array, std)
+    # Check if array contains a value above the max or below the minimum.
+    var_array = correct_vals_out_of_bounds(var_array, var_min, var_max)
 
-    # Create an array containing only the analyzed variable:
-    var_array = np.array(dataset[var])
-    """
-    The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
-    to check if one or all elements from an array satisfy a condition.
-    """
-    if (var_array.any() < var_min): # check if there is at least one element < var_min
-      raise InvalidInputsError(f"The minimum value allowed for variable {var} is {var_min}, but the simulation found at least one value lower than this.")
-    
-    elif (var_array.any() > var_max): # check if there is at least one element > var_max
-      raise InvalidInputsError(f"The maximum value allowed for variable {var} is {var_max}, but the simulation found at least one value higher than this.")
-    
-    else:
-      pass
+    # Add the corrected array to the dataset:
+    dataset[var] = var_array
   
   # Now that the simulation passed through the checking phase, apply the linear correlation:
   leading_current_reactive_power = np.array(dataset['leading_current_reactive_power'])
@@ -186,7 +191,7 @@ def simulation_pipeline(dataset, possible_ranges, kmeans_model, encoder_decoder_
   # Create copy to manipulate without risks of losing data:
   df = dataset.copy(deep = True)
   # Run the functions:
-  df = check_inputs(dataset, possible_ranges)
+  df = add_variation(dataset, possible_ranges)
   
   # Now, get the dataframe that will be used for feeding the model:
   model_df = create_clusters(kmeans_model, df)

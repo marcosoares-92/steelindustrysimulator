@@ -4,6 +4,60 @@ import numpy as np
 import pandas as pd
 
 
+def random_noise(array, std):
+  """Create a random noise with uniform distribution to add to variables.
+  : param: array: np.ndarray to which the noise will be added.
+  : param: std: standard deviation of the original variable. 
+  The noise is generated between 0 and 1 with function
+  numpy.random.rand.
+  https://numpy.org/doc/stable/reference/random/generated/numpy.random.rand.html
+
+  Then, we multiply this value by 3 times the standard deviation to simulate the actuav
+  variability.
+  
+  1. Use np.random.choice(arr, number_of_samples, p = list_of_probabilities) function.
+  https://numpy.org/doc/stable/reference/random/generated/numpy.random.choice.html
+  We set arr = [-1, 1], p = [0.5, 0.5] to create an array of -1 and 1 with equal probabilities.
+  arr must be with same size as the input array.
+  2. We create a second array with random elements.
+  3. Then, we use np.multiply function to multiply element-wisely each element from the arrays,
+  so that noises can be positive or negative.
+  Note: np.multiply: element-wise multiplications; np.matmul: matrix multiplication with rules
+  from linear algebra; np.dot: dot product of the vectors.
+  https://numpy.org/doc/stable/reference/generated/numpy.multiply.html
+  https://numpy.org/doc/stable/reference/generated/numpy.matmul.html
+  """
+
+  total_elements = len(array)
+  # 1. array of -1 and 1:
+  pos_or_neg = np.random.choice([1, -1], total_elements, p = [0.5, 0.5])
+  # If the array has 5 elements, pos_or_neg will be like array([-1, -1, -1, -1,  1])
+  # 2. noise: firstly, create a random array and multiply by 3x std
+  noise_arr = (np.random.rand(total_elements)) * 3 * std
+  # 3. Apply np.multiply to get positive and negative noises from 0 to 3*std:
+  noise_arr = np.multiply(noise_arr, pos_or_neg)
+  # 4. Finally, add the random noise to the array:
+  array = array + noise_arr
+
+  return array
+
+
+def correct_vals_out_of_bounds(array, var_min, var_max):
+  """The random noise can generate arrays with values above
+  the maximum of the variable in the training dataset, var_max,
+  or below the minimum var_min (the boundaries).
+  This function replaces values higher than var_max by var_max,
+  and values lower than var_min by var_min, correcting values out of boundaries.
+  """
+
+  # Replace values above var_max by var_max
+  array = np.where(array > var_max, var_max, array)
+  # Replace values below var_min by var_min
+  array = np.where(array < var_min, var_min, array)
+
+  return array
+
+
 def load_df_and_ranges():
   """Load original dataframe used for modelling and ranges allowed for each input variable
   Warning: this function will only work if the sequence of commands in the function
@@ -16,10 +70,11 @@ def load_df_and_ranges():
 
   possible_ranges = {
 
-    'lagging_current_reactive_power_kvarh':{'min': df['Lagging_Current_Reactive.Power_kVarh_mean'].min(), 'max':df['Lagging_Current_Reactive.Power_kVarh_mean'].max()},
-    'leading_current_reactive_power_kvarh':{'min': df['Leading_Current_Reactive_Power_kVarh_mean'].min(), 'max':df['Leading_Current_Reactive_Power_kVarh_mean'].max()},
-    'co2_tco2':{'min': df['CO2(tCO2)_mean'].min(), 'max':df['CO2(tCO2)_mean'].max()},
-    'lagging_current_power_factor':{'min': df['Lagging_Current_Power_Factor_mean'].min(), 'max':df['Lagging_Current_Power_Factor_mean'].max()},
+    'lagging_current_reactive_power_kvarh':{'min': df['Lagging_Current_Reactive.Power_kVarh_mean'].min(), 'max':df['Lagging_Current_Reactive.Power_kVarh_mean'].max(), 'std':df['Lagging_Current_Reactive.Power_kVarh_mean'].std()},
+    'leading_current_reactive_power_kvarh':{'min': df['Leading_Current_Reactive_Power_kVarh_mean'].min(), 'max':df['Leading_Current_Reactive_Power_kVarh_mean'].max(), 'std':df['Leading_Current_Reactive_Power_kVarh_mean'].std()},
+    'co2_tco2':{'min': df['CO2(tCO2)_mean'].min(), 'max':df['CO2(tCO2)_mean'].max(), 'std':df['CO2(tCO2)_mean'].std()},
+    'lagging_current_power_factor':{'min': df['Lagging_Current_Power_Factor_mean'].min(), 'max':df['Lagging_Current_Power_Factor_mean'].max(), 'std':df['Lagging_Current_Power_Factor_mean'].std()},
+    'leading_current_power_factor':{'min': df['Leading_Current_Power_Factor_mean'].min(), 'max':df['Leading_Current_Power_Factor_mean'].max(), 'std':df['Leading_Current_Power_Factor_mean'].std()}
   
   }
 

@@ -6,6 +6,8 @@ from .idsw.datafetch.pipes import import_export_model_list_dict
 from .idsw.modelling.preparetensors import separate_and_prepare_features_and_responses
 from .idsw.modelling.utils import make_model_predictions
 
+from .utils import (random_noise, correct_vals_out_of_bounds)
+
 
 def load_models():
   """Load K-Means clustering and the TensorFlow encoder-decoder model.
@@ -57,7 +59,7 @@ def load_models():
   return kmeans_model, encoder_decoder_tf_model
 
 
-def calculate_leading_current_power_factor(leading_current_reactive_power):
+def calculate_leading_current_power_factor(leading_current_reactive_power, possible_ranges):
   """Apply the internal linear correlation:
       'Leading_Current_Reactive_Power_kVarh_mean'
       Linear regression summary for Leading_Current_Power_Factor_mean:
@@ -67,6 +69,15 @@ def calculate_leading_current_power_factor(leading_current_reactive_power):
   """
   leading_current_reactive_power = np.array(leading_current_reactive_power)
   leading_current_power_factor = leading_current_reactive_power*(-0.23) + 23.09
+
+  # Add a random noise to this feature:
+  std = possible_ranges['leading_current_power_factor']['std']
+  leading_current_power_factor = random_noise(leading_current_power_factor, std)
+
+  # Check if array contains a value above the max or below the minimum.
+  var_max = possible_ranges['leading_current_power_factor']['var_max']
+  var_min = possible_ranges['leading_current_power_factor']['var_min']
+  leading_current_power_factor = correct_vals_out_of_bounds(leading_current_power_factor, var_min, var_max)
   
   return leading_current_power_factor
 
