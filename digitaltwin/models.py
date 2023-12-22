@@ -79,7 +79,7 @@ def create_clusters(kmeans_model, dataset):
   # Modify the response, since this variable will be used for generating the feature name.
   # It will result in variables with the same name obtained on the pipeline used for training
   # the model.
-  RESPONSE_COLUMNS = 'usage_kwh_scaled'
+  RESPONSE_COLUMNS = 'usage_kwh'
 
   MODEL_OBJECT = kmeans_model
   X_tensor = X
