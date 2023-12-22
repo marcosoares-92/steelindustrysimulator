@@ -75,8 +75,8 @@ def calculate_leading_current_power_factor(leading_current_reactive_power, possi
   leading_current_power_factor = random_noise(leading_current_power_factor, std)
 
   # Check if array contains a value above the max or below the minimum.
-  var_max = possible_ranges['leading_current_power_factor']['var_max']
-  var_min = possible_ranges['leading_current_power_factor']['var_min']
+  var_max = possible_ranges['leading_current_power_factor']['max']
+  var_min = possible_ranges['leading_current_power_factor']['min']
   leading_current_power_factor = correct_vals_out_of_bounds(leading_current_power_factor, var_min, var_max)
   
   return leading_current_power_factor
