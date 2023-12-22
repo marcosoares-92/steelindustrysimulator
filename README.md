@@ -27,8 +27,8 @@ All this information was used for creating the algorithms that will reproduce th
 	- Default is 1 day and 0 hours, i.e., 24h of operation.
         
 - Plant operation parameters:
-	- Lagging Current reactive power, in kVarh; 
-        - Leading Current reactive power, in kVarh; 
+	- Lagging Current reactive power, in kVArh; 
+        - Leading Current reactive power, in kVArh; 
         - tCO2(CO2), in ppm; 
         - Lagging Current power factor, in %;
         - Load Type: Light Load, Medium Load, Maximum Load.

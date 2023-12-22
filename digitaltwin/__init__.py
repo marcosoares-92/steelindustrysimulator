@@ -83,8 +83,8 @@ def digitaltwin_start_msg(PT = True):
             - Default is 1 day and 0 hours, i.e., 24h of operation.
         
         - Plant operation parameters:
-            - Lagging Current reactive power, in kVarh; 
-            - Leading Current reactive power, in kVarh; 
+            - Lagging Current reactive power, in kVArh; 
+            - Leading Current reactive power, in kVArh; 
             - tCO2(CO2), in ppm; 
             - Lagging Current power factor, in %;
             - Load Type: Light Load, Medium Load, Maximum Load.
@@ -129,8 +129,8 @@ def digitaltwin_start_msg(PT = True):
              - O padrão é 1 dia e 0 horas, ou seja, 24h de operação.
         
          - Parâmetros de operação da planta:
-             - Potência reativa de corrente atrasada, em kVarh;
-             - Potência reativa de corrente principal, em kVarh;
+             - Potência reativa de corrente atrasada, em kVArh;
+             - Potência reativa de corrente principal, em kVArh;
              - tCO2(CO2), em ppm;
              - Fator de potência da corrente atrasada, em %;
              - Tipo de Carga: Carga Leve ('Light_Load'), Carga Média ('Medium_Load'), Carga Máxima ('Maximum_Load').

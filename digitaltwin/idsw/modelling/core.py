@@ -360,15 +360,13 @@ class ModelChecking:
 
                             #Get the new_file_path
                             new_file_path = os.path.join(directory_to_save, file_name)
-
+                            new_file_path = new_file_path + ".png"
+                            # supported formats = 'png', 'pdf', 'ps', 'eps' or 'svg'
                             #Export the file to this new path:
-                            # The extension will be automatically added by the savefig method:
-                            plt.savefig(new_file_path, dpi = png_resolution_dpi, format = 'png', transparent = False) 
+                            plt.savefig(new_file_path, dpi = png_resolution_dpi, transparent = False) 
                             # https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.savefig.html
-                            #format (str, supported formats) = 'png', 'pdf', 'ps', 'eps' or 'svg'
-                            #transparent = True or False
                             print (f"Figure exported as \'{new_file_path}.png\'. Any previous file in this root path was overwritten.")
-
+                        
                         #fig.tight_layout()
 
                         ## Show an image read from an image file:
@@ -658,15 +656,13 @@ class ModelChecking:
 
                 #Get the new_file_path
                 new_file_path = os.path.join(directory_to_save, file_name)
-
+                new_file_path = new_file_path + ".png"
+                # supported formats = 'png', 'pdf', 'ps', 'eps' or 'svg'
                 #Export the file to this new path:
-                # The extension will be automatically added by the savefig method:
-                plt.savefig(new_file_path, dpi = png_resolution_dpi, format = 'png', transparent = False) 
+                plt.savefig(new_file_path, dpi = png_resolution_dpi, transparent = False) 
                 # https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.savefig.html
-                #format (str, supported formats) = 'png', 'pdf', 'ps', 'eps' or 'svg'
-                #transparent = True or False
                 print (f"Figure exported as \'{new_file_path}.png\'. Any previous file in this root path was overwritten.")
-
+            
             #fig.tight_layout()
 
             ## Show an image read from an image file:
@@ -890,15 +886,13 @@ class ModelChecking:
 
                 #Get the new_file_path
                 new_file_path = os.path.join(directory_to_save, file_name)
-
+                new_file_path = new_file_path + ".png"
+                # supported formats = 'png', 'pdf', 'ps', 'eps' or 'svg'
                 #Export the file to this new path:
-                # The extension will be automatically added by the savefig method:
-                plt.savefig(new_file_path, dpi = png_resolution_dpi, format = 'png', transparent = False) 
+                plt.savefig(new_file_path, dpi = png_resolution_dpi, transparent = False) 
                 # https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.savefig.html
-                #format (str, supported formats) = 'png', 'pdf', 'ps', 'eps' or 'svg'
-                #transparent = True or False
                 print (f"Figure exported as \'{new_file_path}.png\'. Any previous file in this root path was overwritten.")
-
+            
             #Set image size (x-pixels, y-pixels) for printing in the notebook's cell:
             #plt.figure(figsize = (12, 8))
             #fig.tight_layout()
@@ -1168,15 +1162,13 @@ class ModelChecking:
 
                     #Get the new_file_path
                     new_file_path = os.path.join(directory_to_save, file_name)
-
+                    new_file_path = new_file_path + ".png"
+                    # supported formats = 'png', 'pdf', 'ps', 'eps' or 'svg'
                     #Export the file to this new path:
-                    # The extension will be automatically added by the savefig method:
-                    plt.savefig(new_file_path, dpi = png_resolution_dpi, format = 'png', transparent = False) 
+                    plt.savefig(new_file_path, dpi = png_resolution_dpi, transparent = False) 
                     # https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.savefig.html
-                    #format (str, supported formats) = 'png', 'pdf', 'ps', 'eps' or 'svg'
-                    #transparent = True or False
                     print (f"Figure exported as \'{new_file_path}.png\'. Any previous file in this root path was overwritten.")
-
+                
                 #Set image size (x-pixels, y-pixels) for printing in the notebook's cell:
                 #plt.figure(figsize = (12, 8))
                 #fig.tight_layout()
@@ -1513,15 +1505,13 @@ class ModelChecking:
 
                                     #Get the new_file_path
                                     new_file_path = os.path.join(directory_to_save, file_name)
-
+                                    new_file_path = new_file_path + ".png"
+                                    # supported formats = 'png', 'pdf', 'ps', 'eps' or 'svg'
                                     #Export the file to this new path:
-                                    # The extension will be automatically added by the savefig method:
-                                    plt.savefig(new_file_path, dpi = png_resolution_dpi, format = 'png', transparent = False) 
+                                    plt.savefig(new_file_path, dpi = png_resolution_dpi, transparent = False) 
                                     # https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.savefig.html
-                                    #format (str, supported formats) = 'png', 'pdf', 'ps', 'eps' or 'svg'
-                                    #transparent = True or False
                                     print (f"Figure exported as \'{new_file_path}.png\'. Any previous file in this root path was overwritten.")
-
+                                
                                 #fig.tight_layout()
 
                                 ## Show an image read from an image file:

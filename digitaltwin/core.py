@@ -44,7 +44,8 @@ class GlobalVars:
   
   """DEFAULT PARAMETERS - USER MAY RUN SIMULATION WITHOUT UPDATING DATA"""
   # default value of start date will be the instant:
-  start_date = pd.Timestamp(datetime.now())
+  server_start_time = pd.Timestamp(datetime.now())
+  start_date = server_start_time
   total_days = 1
   total_hours = 0
 
@@ -95,6 +96,9 @@ def update_with_inputs(var1, var2, var3, var4, var5, var6, var7, var8):
     GlobalVars.start_date = start_date
     GlobalVars.total_days = total_days
     GlobalVars.total_hours = total_hours
+
+    # Store user inputs for the final report, before transforming them:
+    GlobalVars.user_inputs = [var4, var5, var6, var7, var8]
 
     # Obtain arrays related to the timestamps:
     timestamps, total_entries = create_timestamp_array(start_date, total_days, total_hours)
@@ -170,8 +174,6 @@ def run_simulation(var1, var2, var3, var4, var5, var6, var7, var8):
 
   # Append the dictionary on the list of exported tables:
   exported_tables.append(table_dict)
-  # Finally, update the list:
-  GlobalVars.exported_tables = exported_tables
 
 
   completion_msg = f"""
@@ -189,19 +191,59 @@ def run_simulation(var1, var2, var3, var4, var5, var6, var7, var8):
                       STEEL INDUSTRY DIGITAL TWIN TERMINAL
 
 
-    # SIMULATION COMPLETED!
+    SIMULATION COMPLETED!
 
 
-    START = {GlobalVars.start_date}
-    CONCLUSION = {conclusion_time}
+    # SIMULATION REPORT
     SIMULATION #{simulation_counter}: IDENTIFIER {conclusion_time.timestamp()} 
-    SIMULATION RUN FOR {GlobalVars.total_days} DAYS AND {GlobalVars.total_hours} HOURS.
+    - STARTED SIMULATION AT (SERVER TIME) = {GlobalVars.server_start_time}
+    - FINISHED SIMULATION AT (SERVER TIME) = {conclusion_time}
 
+
+    ## USER INPUT PARAMETERS
+
+    START DATE = {GlobalVars.start_date}
+    TOTAL DAYS SIMULATED = {GlobalVars.total_days} DAYS
+      + TOTAL HOURS SIMULATED = {GlobalVars.total_hours} HOURS
+    
+    LAGGING CURRENT REACTIVE POWER = {(GlobalVars.user_inputs)[0]} kVArh
+    LEADING CURRENT REACTIVE POWER = {(GlobalVars.user_inputs)[1]} kVArh
+    tCO2(CO2) = {(GlobalVars.user_inputs)[2]} ppm
+    LAGGING CURRENT POWER FACTOR = {(GlobalVars.user_inputs)[3]} %
+    LOAD TYPE = '{(GlobalVars.user_inputs)[4]}'
 
     -------------------------------------------------------------------------------
 
     """
+
+  # CREATE A DATAFRAME WITH THE SIMULATION REPORT:
+
+  parameters = ['IDENTIFIER', 'STARTED SIMULATION AT (SERVER TIME)',
+                'FINISHED SIMULATION AT (SERVER TIME)', 'START DATE',
+                'TOTAL DAYS SIMULATED', '  + TOTAL HOURS SIMULATED',
+                'LAGGING CURRENT REACTIVE POWER', 'LEADING CURRENT REACTIVE POWER',
+                'tCO2(CO2)', 'LAGGING CURRENT POWER FACTOR', 'LOAD TYPE']
   
+  user_input_params = [f"SIMULATION #{simulation_counter}: IDENTIFIER {conclusion_time.timestamp()}", 
+            f"{GlobalVars.server_start_time}", f"{conclusion_time}", f"{GlobalVars.start_date}",
+            f"{GlobalVars.total_days} DAYS", f"{GlobalVars.total_hours} HOURS",
+            f"{(GlobalVars.user_inputs)[0]} kVArh", f"{(GlobalVars.user_inputs)[1]} kVArh",
+            f"{(GlobalVars.user_inputs)[2]} ppm", f"{(GlobalVars.user_inputs)[3]} %",
+            f"'{(GlobalVars.user_inputs)[4]}'"]
+  
+  sim_rep = pd.DataFrame(data = {'SIMULATION_REPORT': parameters, 'USER_INPUT': user_input_params})
+
+  # Get a dictionary for exporting the table:
+  table_dict = {'dataframe_obj_to_be_exported': sim_rep, 
+                    'excel_sheet_name': ("REP_" + sheet_name)}
+
+  # Append the dictionary on the list of exported tables:
+  exported_tables.append(table_dict)
+
+  # Finally, update the list:
+  GlobalVars.exported_tables = exported_tables
+  
+
   print(completion_msg)
   try:
         # only works in Jupyter Notebook:
@@ -221,58 +263,65 @@ def visualize_usage_kwh(export_images = True):
   exported_tables = GlobalVars.exported_tables
   # Loop through each simulation:
   for table_dict in exported_tables:
-    msg = f"""
+    # Check if it is not a Report table. These tables have 4 initial 
+    # characters "REP_" in their sheet names.
+    if (table_dict['excel_sheet_name'][:4] != "REP_"):
     
-    
-      ----------------------------------------------------------------------
-                        STEEL INDUSTRY DIGITAL TWIN TERMINAL
-
-
-                            ENERGY CONSUME (kWh)
-
-
-      SIMULATION DATA STORED IN {table_dict['excel_sheet_name']}
+      msg = f"""
       
-      ------------------------------------------------------------------------
+      
+        ----------------------------------------------------------------------
+                          STEEL INDUSTRY DIGITAL TWIN TERMINAL
 
-      """
 
-    print(msg)
+                              ENERGY CONSUME (kWh)
 
-    df = table_dict['dataframe_obj_to_be_exported']
-    timestamp = df['timestamp']
-    usage_kwh = df['usage_kwh']
 
-    DATA_IN_SAME_COLUMN = False
-    DATASET = None
-    COLUMN_WITH_PREDICT_VAR_X = 'X'
-    COLUMN_WITH_RESPONSE_VAR_Y = 'Y'
-    COLUMN_WITH_LABELS = 'label_column'
-    LIST_OF_DICTIONARIES_WITH_SERIES_TO_ANALYZE = [
+        SIMULATION DATA STORED IN {table_dict['excel_sheet_name']}
         
-        {'x': timestamp, 'y': usage_kwh, 'lab': 'usage_kwh'}, 
-    ]
-    X_AXIS_ROTATION = 70
-    Y_AXIS_ROTATION = 0
-    GRID = True
-    ADD_SPLINE_LINES = True
-    ADD_SCATTER_DOTS = False
-    HORIZONTAL_AXIS_TITLE = 'Timestamp'
-    VERTICAL_AXIS_TITLE = 'kWh'
-    PLOT_TITLE = table_dict['excel_sheet_name']
+        ------------------------------------------------------------------------
 
-    EXPORT_PNG = export_images
-    DIRECTORY_TO_SAVE = ""
-    FILE_NAME = table_dict['excel_sheet_name']
-    PNG_RESOLUTION_DPI = 330
-    
-    time_series_vis (data_in_same_column = DATA_IN_SAME_COLUMN, df = DATASET, column_with_predict_var_x = COLUMN_WITH_PREDICT_VAR_X, column_with_response_var_y = COLUMN_WITH_RESPONSE_VAR_Y, column_with_labels = COLUMN_WITH_LABELS, list_of_dictionaries_with_series_to_analyze = LIST_OF_DICTIONARIES_WITH_SERIES_TO_ANALYZE, x_axis_rotation = X_AXIS_ROTATION, y_axis_rotation = Y_AXIS_ROTATION, grid = GRID, add_splines_lines = ADD_SPLINE_LINES, add_scatter_dots = ADD_SCATTER_DOTS, horizontal_axis_title = HORIZONTAL_AXIS_TITLE, vertical_axis_title = VERTICAL_AXIS_TITLE, plot_title = PLOT_TITLE, export_png = EXPORT_PNG, directory_to_save = DIRECTORY_TO_SAVE, file_name = FILE_NAME, png_resolution_dpi = PNG_RESOLUTION_DPI)
+        """
 
-    if (export_images):
-      # Download the png file saved in Colab environment:
-      ACTION = 'download'
-      FILE_TO_DOWNLOAD_FROM_COLAB = (table_dict['excel_sheet_name'] + ".png")
-      upload_to_or_download_file_from_colab (action = ACTION, file_to_download_from_colab = FILE_TO_DOWNLOAD_FROM_COLAB)
+      print(msg)
+
+      df = table_dict['dataframe_obj_to_be_exported']
+      timestamp = df['timestamp']
+      usage_kwh = df['usage_kwh']
+
+      DATA_IN_SAME_COLUMN = False
+      DATASET = None
+      COLUMN_WITH_PREDICT_VAR_X = 'X'
+      COLUMN_WITH_RESPONSE_VAR_Y = 'Y'
+      COLUMN_WITH_LABELS = 'label_column'
+      LIST_OF_DICTIONARIES_WITH_SERIES_TO_ANALYZE = [
+          
+          {'x': timestamp, 'y': usage_kwh, 'lab': 'usage_kwh'}, 
+      ]
+      X_AXIS_ROTATION = 70
+      Y_AXIS_ROTATION = 0
+      GRID = True
+      ADD_SPLINE_LINES = True
+      ADD_SCATTER_DOTS = False
+      HORIZONTAL_AXIS_TITLE = 'Timestamp'
+      VERTICAL_AXIS_TITLE = 'kWh'
+      PLOT_TITLE = table_dict['excel_sheet_name']
+
+      EXPORT_PNG = export_images
+      DIRECTORY_TO_SAVE = ""
+      FILE_NAME = table_dict['excel_sheet_name']
+      PNG_RESOLUTION_DPI = 330
+      
+      time_series_vis (data_in_same_column = DATA_IN_SAME_COLUMN, df = DATASET, column_with_predict_var_x = COLUMN_WITH_PREDICT_VAR_X, column_with_response_var_y = COLUMN_WITH_RESPONSE_VAR_Y, column_with_labels = COLUMN_WITH_LABELS, list_of_dictionaries_with_series_to_analyze = LIST_OF_DICTIONARIES_WITH_SERIES_TO_ANALYZE, x_axis_rotation = X_AXIS_ROTATION, y_axis_rotation = Y_AXIS_ROTATION, grid = GRID, add_splines_lines = ADD_SPLINE_LINES, add_scatter_dots = ADD_SCATTER_DOTS, horizontal_axis_title = HORIZONTAL_AXIS_TITLE, vertical_axis_title = VERTICAL_AXIS_TITLE, plot_title = PLOT_TITLE, export_png = EXPORT_PNG, directory_to_save = DIRECTORY_TO_SAVE, file_name = FILE_NAME, png_resolution_dpi = PNG_RESOLUTION_DPI)
+
+      if (export_images):
+        # Download the png file saved in Colab environment:
+        ACTION = 'download'
+        FILE_TO_DOWNLOAD_FROM_COLAB = (table_dict['excel_sheet_name'] + ".png")
+        upload_to_or_download_file_from_colab (action = ACTION, file_to_download_from_colab = FILE_TO_DOWNLOAD_FROM_COLAB)
+
+    else:
+      pass
 
 
 def download_excel_with_data():
