@@ -56,7 +56,12 @@ def digitaltwin_start_msg(PT = True):
     """When the Steel Industry Digital Twin is started, the following message is shown."""
 
     start_msg = """
-        
+      
+      
+        ----------------------------------------------------------------------
+                          STEEL INDUSTRY DIGITAL TWIN TERMINAL
+
+
         Welcome to the Steel Industry Digital Twin!
 
         This simulator applies advanced AI (deep learning) technologies to reproduce the
@@ -98,10 +103,17 @@ def digitaltwin_start_msg(PT = True):
             - Number of Seconds from midnight (NSM), in seconds (s); 
             - Week status: if the simulated day is 'Weekend' or 'Weekday'; 
             - Day of week: 'Sunday', 'Monday', ..., 'Saturday'. 
-            
+  
+        ------------------------------------------------------------------------
+
     """
 
     start_msg_pt = """
+      
+      
+        ----------------------------------------------------------------------
+                          STEEL INDUSTRY DIGITAL TWIN TERMINAL
+
 
         Bem-vindo ao gêmeo digital (Digital Twin) da indústria siderúrgica!
 
@@ -147,7 +159,9 @@ def digitaltwin_start_msg(PT = True):
              - Dia da semana: 'Domingo' (indicado como 'Sunday'), 'Segunda-feira' ('Monday'), 
              'Terça-feira' ('Tuesday'), 'Quarta-feira' ('Wednesday'), 'Quinta-feira' ('Thursday'),
              'Sexta-feira' ('Friday'), 'Sábado' ('Saturday').
-            
+   
+        ------------------------------------------------------------------------
+
     """
     
     if (PT):
