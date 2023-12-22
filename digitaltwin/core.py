@@ -57,7 +57,7 @@ class GlobalVars:
   lagging_current_reactive_power, leading_current_reactive_power, co2_tco2, lagging_current_power_factor, load_type = convert_input_vars_to_arrays(total_entries, lagging_current_reactive_power, leading_current_reactive_power, co2_tco2, lagging_current_power_factor, load_type)
   
   # Now, create a dataframe for the simulations:
-  sim_df = obtain_simulation_df(timestamps, lagging_current_reactive_power, leading_current_reactive_power, co2_tco2, lagging_current_power_factor, leading_current_power_factor, nsm, weekstatus, day_of_week, load_type)
+  sim_df = obtain_simulation_df(timestamps, lagging_current_reactive_power, leading_current_reactive_power, co2_tco2, lagging_current_power_factor, nsm, weekstatus, day_of_week, load_type)
   # Finally, add variation to this dataframe:
   sim_df = add_variation_to_features(sim_df, possible_ranges)
 
@@ -117,7 +117,7 @@ def update_with_inputs(var1, var2, var3, var4, var5, var6, var7, var8):
     GlobalVars.load_type = load_type
 
     # Now, create a dataframe for the simulations:
-    sim_df = obtain_simulation_df(timestamps, lagging_current_reactive_power, leading_current_reactive_power, co2_tco2, lagging_current_power_factor, leading_current_power_factor, nsm, weekstatus, day_of_week, load_type)
+    sim_df = obtain_simulation_df(timestamps, lagging_current_reactive_power, leading_current_reactive_power, co2_tco2, lagging_current_power_factor, nsm, weekstatus, day_of_week, load_type)
     # Finally, add variation to this dataframe:
     sim_df = add_variation_to_features(sim_df, GlobalVars.possible_ranges)
     # Update values on GlobalVars:

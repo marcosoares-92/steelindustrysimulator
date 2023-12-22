@@ -234,7 +234,7 @@ def calculate_leading_current_power_factor(leading_current_reactive_power, possi
   return leading_current_power_factor
 
 
-def obtain_simulation_df(timestamps, lagging_current_reactive_power, leading_current_reactive_power, co2_tco2, lagging_current_power_factor, leading_current_power_factor, nsm, weekstatus, day_of_week, load_type):
+def obtain_simulation_df(timestamps, lagging_current_reactive_power, leading_current_reactive_power, co2_tco2, lagging_current_power_factor, nsm, weekstatus, day_of_week, load_type):
   """Get a Pandas dataframe from each one of the arrays."""
   
   sim_df = pd.DataFrame(data = {
@@ -244,7 +244,6 @@ def obtain_simulation_df(timestamps, lagging_current_reactive_power, leading_cur
     "leading_current_reactive_power_kvarh": leading_current_reactive_power,
     "co2_tco2": co2_tco2,
     "lagging_current_power_factor": lagging_current_power_factor,
-    "leading_current_power_factor": leading_current_power_factor,
     "nsm": nsm,
     "weekstatus": weekstatus,
     "day_of_week": day_of_week,
