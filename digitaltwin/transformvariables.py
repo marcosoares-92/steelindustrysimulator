@@ -47,7 +47,7 @@ def add_variation(dataset, possible_ranges):
   
   # Now that the simulation passed through the checking phase, apply the linear correlation:
   leading_current_reactive_power = np.array(dataset['leading_current_reactive_power'])
-  leading_current_power_factor = calculate_leading_current_power_factor(leading_current_reactive_power)
+  leading_current_power_factor = calculate_leading_current_power_factor(leading_current_reactive_power, possible_ranges)
   # Add to the dataset:
   dataset['leading_current_power_factor'] = leading_current_power_factor
 

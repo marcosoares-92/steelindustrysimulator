@@ -59,7 +59,7 @@ class GlobalVars:
   lagging_current_reactive_power, leading_current_reactive_power, co2_tco2, lagging_current_power_factor, load_type = convert_input_vars_to_arrays(total_entries, lagging_current_reactive_power, leading_current_reactive_power, co2_tco2, lagging_current_power_factor, load_type)
   
   # Calculate leading_current_power_factor from correlation:
-  leading_current_power_factor = calculate_leading_current_power_factor(leading_current_reactive_power)
+  leading_current_power_factor = calculate_leading_current_power_factor(leading_current_reactive_power, possible_ranges)
 
   # Now, create a dataframe for the simulations:
   sim_df = obtain_simulation_df(timestamps, lagging_current_reactive_power, leading_current_reactive_power, co2_tco2, lagging_current_power_factor, leading_current_power_factor, nsm, weekstatus, day_of_week, load_type)
