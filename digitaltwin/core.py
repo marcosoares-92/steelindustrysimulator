@@ -7,19 +7,17 @@ from .idsw.datafetch.core import InvalidInputsError
 from .idsw.datafetch.pipes import upload_to_or_download_file_from_colab, export_pd_dataframe_as_excel
 from .idsw.etl.characterize import time_series_vis
 
-from .models import (
-  load_models,
-  calculate_leading_current_power_factor,
-)
+from .models import load_models
 
 from .transformvariables import simulation_pipeline
-from .utils import (random_start,
+from .utils import (load_df_and_ranges,
+                    random_start,
                     create_timestamp_array,
                     create_dayofweek_weekstatus,
                     calculate_nsm,
-                    load_df_and_ranges,
                     convert_input_vars_to_arrays,
                     obtain_simulation_df,
+                    add_variation_to_features
                     )
 
 
@@ -58,11 +56,10 @@ class GlobalVars:
   # Convert the input variables to arrays (one value for each timestamp)
   lagging_current_reactive_power, leading_current_reactive_power, co2_tco2, lagging_current_power_factor, load_type = convert_input_vars_to_arrays(total_entries, lagging_current_reactive_power, leading_current_reactive_power, co2_tco2, lagging_current_power_factor, load_type)
   
-  # Calculate leading_current_power_factor from correlation:
-  leading_current_power_factor = calculate_leading_current_power_factor(leading_current_reactive_power, possible_ranges)
-
   # Now, create a dataframe for the simulations:
   sim_df = obtain_simulation_df(timestamps, lagging_current_reactive_power, leading_current_reactive_power, co2_tco2, lagging_current_power_factor, leading_current_power_factor, nsm, weekstatus, day_of_week, load_type)
+  # Finally, add variation to this dataframe:
+  sim_df = add_variation_to_features(sim_df, possible_ranges)
 
 
 def update_with_inputs(var1, var2, var3, var4, var5, var6, var7, var8):
@@ -119,13 +116,10 @@ def update_with_inputs(var1, var2, var3, var4, var5, var6, var7, var8):
     GlobalVars.lagging_current_power_factor = lagging_current_power_factor
     GlobalVars.load_type = load_type
 
-    # Calculate leading_current_power_factor from correlation:
-    leading_current_power_factor = calculate_leading_current_power_factor(leading_current_reactive_power)
-    # Update values on GlobalVars:
-    GlobalVars.leading_current_power_factor = leading_current_power_factor
-
     # Now, create a dataframe for the simulations:
     sim_df = obtain_simulation_df(timestamps, lagging_current_reactive_power, leading_current_reactive_power, co2_tco2, lagging_current_power_factor, leading_current_power_factor, nsm, weekstatus, day_of_week, load_type)
+    # Finally, add variation to this dataframe:
+    sim_df = add_variation_to_features(sim_df, GlobalVars.possible_ranges)
     # Update values on GlobalVars:
     GlobalVars.sim_df = sim_df
 

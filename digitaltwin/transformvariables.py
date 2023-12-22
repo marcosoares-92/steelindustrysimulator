@@ -6,52 +6,9 @@ from .idsw.etl.strings import switch_strings
 from .idsw.etl.transform import (get_frequency_features, feature_scaling)
 
 from .models import (
-  calculate_leading_current_power_factor,
   create_clusters,
   prediction_pipeline
 )
-
-from .utils import (random_noise, correct_vals_out_of_bounds)
-
-
-def add_variation(dataset, possible_ranges):
-  """ Add the random noise to each continous input to add a source
-  of variation.
-  - Check if all inputs are within the valid ranges. If a value is outside
-  the boundaries, correct it. Notice that the boundaries force the simulated
-  data to get closer to the distorted distributions: if a boundary is close to
-  the mean value, then there will be more data on the other side of the distribution,
-  introducing skewness and kurtosis.
-  - Finally, apply the linear correlation to calculate the
-  leading current power factor, and add the variation to this feature.
-  """
-  
-  checked_variables = ['lagging_current_reactive_power_kvarh', 
-                      'leading_current_reactive_power_kvarh',
-                      'co2_tco2', 'lagging_current_power_factor']
-  
-  for var in checked_variables:
-    # Check if the variables are within the valid range. If they are not, raise an error:
-    var_array = np.array(dataset[var])
-    var_min = possible_ranges[var]['min']
-    var_max = possible_ranges[var]['max']
-    std = possible_ranges[var]['std']
-    
-    # Add a random noise to this feature:
-    var_array = random_noise(var_array, std)
-    # Check if array contains a value above the max or below the minimum.
-    var_array = correct_vals_out_of_bounds(var_array, var_min, var_max)
-
-    # Add the corrected array to the dataset:
-    dataset[var] = var_array
-  
-  # Now that the simulation passed through the checking phase, apply the linear correlation:
-  leading_current_reactive_power = np.array(dataset['leading_current_reactive_power'])
-  leading_current_power_factor = calculate_leading_current_power_factor(leading_current_reactive_power, possible_ranges)
-  # Add to the dataset:
-  dataset['leading_current_power_factor'] = leading_current_power_factor
-
-  return dataset
 
 
 def encode_weekdays(dataset):
@@ -191,9 +148,7 @@ def simulation_pipeline(dataset, possible_ranges, kmeans_model, encoder_decoder_
   # Create copy to manipulate without risks of losing data:
   df = dataset.copy(deep = True)
   # Run the functions:
-  df = add_variation(dataset, possible_ranges)
-  
-  # Now, get the dataframe that will be used for feeding the model:
+  # Get the dataframe that will be used for feeding the model:
   model_df = create_clusters(kmeans_model, df)
   model_df = encode_weekdays(model_df)
   model_df = encode_weekstatus(model_df)
