@@ -64,14 +64,22 @@ def create_clusters(kmeans_model, dataset):
   # Create a deep copy for not losing data:
   df = dataset.copy(deep = True)
   DATASET = dataset  #Alternatively: object containing the dataset to be analyzed
+  DATASET['dummy_response'] = 0
 
   FEATURES_COLUMNS = ['lagging_current_reactive_power_kvarh',	
                     'leading_current_reactive_power_kvarh',
                     'lagging_current_power_factor',
                     'leading_current_power_factor']
   
-  RESPONSE_COLUMNS = 'usage_kwh'
+  RESPONSE_COLUMNS = 'dummy_response'
+  # For clustering, any variable can be input as response. Since we still do not have the
+  # actual response, let's use this dummy one.
   X, y, column_map_dict = separate_and_prepare_features_and_responses (df = DATASET, features_columns = FEATURES_COLUMNS, response_columns = RESPONSE_COLUMNS)
+
+  # Modify the response, since this variable will be used for generating the feature name.
+  # It will result in variables with the same name obtained on the pipeline used for training
+  # the model.
+  RESPONSE_COLUMNS = 'usage_kwh_scaled'
 
   MODEL_OBJECT = kmeans_model
   X_tensor = X
@@ -90,7 +98,9 @@ def create_clusters(kmeans_model, dataset):
 def get_tensor_for_simulation(dataset):
   """Select the features and prepare tensors for running the simulation"""
 
-  DATASET = dataset 
+  DATASET = dataset
+  DATASET['dummy_response'] = 0
+
   FEATURES_COLUMNS = ['lagging_current_reactive_power_kvarh_scaled',
         'leading_current_reactive_power_kvarh_scaled', 'co2_tco2_scaled',
         'weekstatus', 'day_of_week', 'load_type_Light_Load_OneHotEnc',
@@ -98,10 +108,17 @@ def get_tensor_for_simulation(dataset):
         'freq1_sin', 'freq1_cos', 'freq2_sin', 'freq2_cos', 'freq3_sin',
         'freq3_cos', 'freq4_sin', 'freq4_cos', 'freq5_sin', 'freq5_cos',
         'freq6_sin', 'freq6_cos', 'electric_cluster']
-
-  RESPONSE_COLUMNS = 'usage_kwh_scaled'
+  
+  RESPONSE_COLUMNS = 'dummy_response'
+  # For clustering, any variable can be input as response. Since we still do not have the
+  # actual response, let's use this dummy one.
   X, y, column_map_dict = separate_and_prepare_features_and_responses (df = DATASET, features_columns = FEATURES_COLUMNS, response_columns = RESPONSE_COLUMNS)
-
+  
+  # Modify the response, since this variable will be used for generating the feature name.
+  # It will result in variables with the same name obtained on the pipeline used for training
+  # the model.
+  RESPONSE_COLUMNS = 'usage_kwh_scaled'
+  
   return X, RESPONSE_COLUMNS
 
 
