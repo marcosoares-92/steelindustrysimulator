@@ -161,7 +161,7 @@ def prediction_pipeline(encoder_decoder_tf_model, model_df, df):
 
   X, RESPONSE_COLUMNS = get_tensor_for_simulation(model_df)
   model_df = get_model_predictions(encoder_decoder_tf_model, X, RESPONSE_COLUMNS, model_df)
-  scaled_predictions = model_df['y_pred_usage_kwh_scaled']
+  scaled_predictions = model_df['usage_kwh_scaled']
   model_predictions = rescale_response(predicted_values)
   # Add the predictions to the correct dataset:
   df['usage_kwh'] = model_predictions
