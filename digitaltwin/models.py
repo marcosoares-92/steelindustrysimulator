@@ -65,8 +65,8 @@ def create_clusters(kmeans_model, dataset):
   df = dataset.copy(deep = True)
   DATASET = dataset  #Alternatively: object containing the dataset to be analyzed
 
-  FEATURES_COLUMNS = ['lagging_current_reactive_power',
-                    'leading_current_reactive_power',
+  FEATURES_COLUMNS = ['lagging_current_reactive_power_kvarh',	
+                    'leading_current_reactive_power_kvarh',
                     'lagging_current_power_factor',
                     'leading_current_power_factor']
   
