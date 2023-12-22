@@ -149,9 +149,10 @@ def run_simulation(var1, var2, var3, var4, var5, var6, var7, var8):
   # Update on GlobalVars:
   GlobalVars.sim_df = sim_df
 
-
   # Get the simulation counting:
   simulation_counter = GlobalVars.simulation_counter
+  # Get list exported_tables:
+  exported_tables = GlobalVars.exported_tables
   # Get start date:
   start_date = GlobalVars.start_date
   # Obtain sheet name:
@@ -162,15 +163,24 @@ def run_simulation(var1, var2, var3, var4, var5, var6, var7, var8):
                     'excel_sheet_name': sheet_name}
 
   # Append the dictionary on the list of exported tables:
-  GlobalVars.exported_tables = GlobalVars.exported_tables.append(table_dict)
+  exported_tables.append(table_dict)
+  # Finally, update the list:
+  GlobalVars.exported_tables = exported_tables
 
 
   completion_msg = f"""
-    
-    
-    ----------------------------------------------------------------------
-                      STEEL INDUSTRY DIGITAL TWIN TERMINAL
 
+
+
+
+
+
+
+
+
+
+    -------------------------------------------------------------------------------
+                      STEEL INDUSTRY DIGITAL TWIN TERMINAL
 
 
     # SIMULATION COMPLETED!
@@ -178,16 +188,11 @@ def run_simulation(var1, var2, var3, var4, var5, var6, var7, var8):
 
     START = {GlobalVars.start_date}
     SIMULATION #{simulation_counter} 
-    SIMULATION FOR {GlobalVars.total_days} DAYS AND {GlobalVars.total_hours}
+    SIMULATION RUN FOR {GlobalVars.total_days} DAYS AND {GlobalVars.total_hours} HOURS.
 
 
+    -------------------------------------------------------------------------------
 
-
-    ------------------------------------------------------------------------
-
-    
-    
-    
     """
   
   print(completion_msg)
@@ -206,14 +211,14 @@ def visualize_usage_kwh(export_images = True):
   export the image files and download them.
   """
 
+  exported_tables = GlobalVars.exported_tables
   # Loop through each simulation:
-  for table_dict in GlobalVars.exported_tables:
+  for table_dict in exported_tables:
     msg = f"""
     
     
       ----------------------------------------------------------------------
                         STEEL INDUSTRY DIGITAL TWIN TERMINAL
-
 
 
                             ENERGY CONSUME (kWh)
@@ -265,7 +270,7 @@ def visualize_usage_kwh(export_images = True):
 
 def download_excel_with_data():
   """Download Excel file containing all the tables generated from simulations."""
-
+  
   # Create Excel file and store it in Colab's memory:
   FILE_NAME_WITHOUT_EXTENSION = "datasets"
   EXPORTED_TABLES = GlobalVars.exported_tables
