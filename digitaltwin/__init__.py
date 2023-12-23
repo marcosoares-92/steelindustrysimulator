@@ -52,6 +52,39 @@ def start_simulation(PT = True):
       print(f"Process with output: {output}, error: {error}.\n")
 
 
+def correct_sklearn_version():
+  """Install the same Scikit-learn version used to train the Cluster model,
+  avoiding compatibility issues
+  
+  Equivalent to running:
+  ! python -m pip install scikit-learn==1.3.1
+  """
+
+  from subprocess import Popen, PIPE, TimeoutExpired
+
+  proc = Popen(["python", "-m", "pip", "install", "scikit-learn==1.3.1"], stdout = PIPE, stderr = PIPE)
+
+  try:
+      output, error = proc.communicate(timeout = 15)
+      print ("Updating Digital Twin system...")
+  except:
+      # General exception
+      output, error = proc.communicate()
+      print("Updating Digital Twin system...")
+  
+  import sklearn
+  msg = """System update failed.
+      
+      If the digital twin do not work properly, run a cell declaring:
+
+      ! pip install sklearn==1.3.1
+      """
+
+  if ((sklearn.__version__) != '1.3.1'):
+    # Scikit-learn was not updated.
+    print(msg)
+
+
 def digitaltwin_start_msg(PT = True):
     """When the Steel Industry Digital Twin is started, the following message is shown."""
 
@@ -169,3 +202,17 @@ def digitaltwin_start_msg(PT = True):
 
     print("\n")
     print(start_msg)
+
+
+def start_digital_twin(PT = True):
+    """Update Scikit-learn and start the simulation:"""
+    try:
+        # In case the simulator was installed in the machine and the GitHub
+        # is not downloaded, do it:
+        start_simulation(PT = PT)
+    
+    except:
+        pass
+    
+    correct_sklearn_version()
+    digitaltwin_start_msg(PT = PT)
