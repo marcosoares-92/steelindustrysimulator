@@ -53,36 +53,49 @@ def start_simulation(PT = True):
 
 
 def correct_sklearn_version():
-  """Install the same Scikit-learn version used to train the Cluster model,
-  avoiding compatibility issues
-  
-  Equivalent to running:
-  ! python -m pip install scikit-learn==1.3.1
-  """
+    """Install the same Scikit-learn version used to train the Cluster model,
+    avoiding compatibility issues
+    
+    Equivalent to running:
+    ! python -m pip install scikit-learn==1.3.1
+    """
 
-  from subprocess import Popen, PIPE, TimeoutExpired
+    from subprocess import Popen, PIPE, TimeoutExpired
 
-  proc = Popen(["python", "-m", "pip", "install", "scikit-learn==1.3.1"], stdout = PIPE, stderr = PIPE)
+    proc = Popen(["python", "-m", "pip", "install", "scikit-learn==1.3.1"], stdout = PIPE, stderr = PIPE)
 
-  try:
-      output, error = proc.communicate(timeout = 15)
-      print ("Updating Digital Twin system...")
-  except:
-      # General exception
-      output, error = proc.communicate()
-      print("Updating Digital Twin system...")
-  
-  import sklearn
-  msg = """System update failed.
+    start_msg = """
       
-      If the digital twin do not work properly, run a cell declaring:
+      
+        ----------------------------------------------------------------------
+                          STEEL INDUSTRY DIGITAL TWIN TERMINAL
 
-      ! pip install sklearn==1.3.1
-      """
 
-  if ((sklearn.__version__) != '1.3.1'):
-    # Scikit-learn was not updated.
-    print(msg)
+        Updating Digital Twin system...
+        
+        ------------------------------------------------------------------------
+
+    """
+
+    try:
+        output, error = proc.communicate(timeout = 30)
+    except:
+        # General exception
+        output, error = proc.communicate()
+        
+        print(start_msg)
+    
+    import sklearn
+    msg = """System update failed.
+        
+        If the digital twin do not work properly, run a cell declaring:
+
+        ! pip install sklearn==1.3.1
+        """
+
+    if ((sklearn.__version__) != '1.3.1'):
+        # Scikit-learn was not updated.
+        print(msg)
 
 
 def digitaltwin_start_msg(PT = True):
