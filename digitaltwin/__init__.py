@@ -9,6 +9,52 @@ marcosoares.feq@gmail.com
 marco.soares@bayer.com
 """
 
+# Before loading .core models, update Scikit-learn:
+"""Install the same Scikit-learn version used to train the Cluster model,
+    avoiding compatibility issues
+    
+    Equivalent to running:
+    ! python -m pip install scikit-learn==1.3.1
+"""
+
+from subprocess import Popen, PIPE, TimeoutExpired
+
+proc = Popen(["python", "-m", "pip", "install", "scikit-learn==1.3.1"], stdout = PIPE, stderr = PIPE)
+start_msg = """
+      
+      
+    ----------------------------------------------------------------------
+                      STEEL INDUSTRY DIGITAL TWIN TERMINAL
+
+
+    Updating Digital Twin system...
+        
+    ------------------------------------------------------------------------
+
+    """
+
+try:
+    output, error = proc.communicate(timeout = 30)
+except:
+    # General exception
+    output, error = proc.communicate()
+        
+print(start_msg)
+    
+import sklearn
+msg = """System update failed.
+        
+        If the digital twin do not work properly, run a cell declaring:
+
+        ! pip install sklearn==1.3.1
+    """
+
+if ((sklearn.__version__) != '1.3.1'):
+    # Scikit-learn was not updated.
+    print(msg)
+
+# Now, import the modules
+
 from .core import (
     run_simulation,
     visualize_usage_kwh,
@@ -50,52 +96,6 @@ def start_simulation(PT = True):
       # General exception
       output, error = proc.communicate()
       print(f"Process with output: {output}, error: {error}.\n")
-
-
-def correct_sklearn_version():
-    """Install the same Scikit-learn version used to train the Cluster model,
-    avoiding compatibility issues
-    
-    Equivalent to running:
-    ! python -m pip install scikit-learn==1.3.1
-    """
-
-    from subprocess import Popen, PIPE, TimeoutExpired
-
-    proc = Popen(["python", "-m", "pip", "install", "scikit-learn==1.3.1"], stdout = PIPE, stderr = PIPE)
-
-    start_msg = """
-      
-      
-        ----------------------------------------------------------------------
-                          STEEL INDUSTRY DIGITAL TWIN TERMINAL
-
-
-        Updating Digital Twin system...
-        
-        ------------------------------------------------------------------------
-
-    """
-
-    try:
-        output, error = proc.communicate(timeout = 30)
-    except:
-        # General exception
-        output, error = proc.communicate()
-        
-        print(start_msg)
-    
-    import sklearn
-    msg = """System update failed.
-        
-        If the digital twin do not work properly, run a cell declaring:
-
-        ! pip install sklearn==1.3.1
-        """
-
-    if ((sklearn.__version__) != '1.3.1'):
-        # Scikit-learn was not updated.
-        print(msg)
 
 
 def digitaltwin_start_msg(PT = True):
@@ -218,7 +218,7 @@ def digitaltwin_start_msg(PT = True):
 
 
 def start_digital_twin(PT = True):
-    """Update Scikit-learn and start the simulation:"""
+    """Check if the files are in the directory and start the simulation:"""
     try:
         # In case the simulator was installed in the machine and the GitHub
         # is not downloaded, do it:
@@ -226,6 +226,5 @@ def start_digital_twin(PT = True):
     
     except:
         pass
-    
-    correct_sklearn_version()
+
     digitaltwin_start_msg(PT = PT)
