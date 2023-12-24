@@ -20,9 +20,7 @@ marco.soares@bayer.com
 from subprocess import Popen, PIPE, TimeoutExpired
 
 proc = Popen(["python", "-m", "pip", "install", "scikit-learn==1.3.1"], stdout = PIPE, stderr = PIPE)
-start_msg = """
-      
-      
+start_msg = """  
     ----------------------------------------------------------------------
                       STEEL INDUSTRY DIGITAL TWIN TERMINAL
 
@@ -42,11 +40,20 @@ except:
 print(start_msg)
     
 import sklearn
-msg = """System update failed.
+msg = """
+ 
+    ----------------------------------------------------------------------
+                      STEEL INDUSTRY DIGITAL TWIN TERMINAL
         
-        If the digital twin do not work properly, run a cell declaring:
+                                    WARNING!
 
-        ! pip install sklearn==1.3.1
+        System update failed. If the digital twin do not work properly, 
+        run a cell declaring:
+
+                        ! pip install sklearn==1.3.1 
+
+    ------------------------------------------------------------------------
+
     """
 
 if ((sklearn.__version__) != '1.3.1'):
@@ -102,8 +109,6 @@ def digitaltwin_start_msg(PT = True):
     """When the Steel Industry Digital Twin is started, the following message is shown."""
 
     start_msg = """
-      
-      
         ----------------------------------------------------------------------
                           STEEL INDUSTRY DIGITAL TWIN TERMINAL
 
@@ -155,8 +160,6 @@ def digitaltwin_start_msg(PT = True):
     """
 
     start_msg_pt = """
-      
-      
         ----------------------------------------------------------------------
                           STEEL INDUSTRY DIGITAL TWIN TERMINAL
 
