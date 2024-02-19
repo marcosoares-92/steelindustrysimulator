@@ -129,24 +129,26 @@ def get_frequency_features (df, timestamp_tag_column, important_frequencies = [{
     # Let's put a small degree of transparency (1 - OPACITY) = 0.05 = 5%
     # so that the bars do not completely block other views.
 
-    OPACITY = 0.95
-    
-    if (plot_title is None):
-        # Set graphic title
-        plot_title = f"frequency_signals"
+    if ControlVars.show_plots:
+        
+        OPACITY = 0.95
+        
+        if (plot_title is None):
+            # Set graphic title
+            plot_title = f"frequency_signals"
 
-    if (horizontal_axis_title is None):
-        # Set horizontal axis title
-        horizontal_axis_title = "timestamp"
+        if (horizontal_axis_title is None):
+            # Set horizontal axis title
+            horizontal_axis_title = "timestamp"
 
-    if (vertical_axis_title is None):
-        # Set vertical axis title
-        vertical_axis_title = "signal"
+        if (vertical_axis_title is None):
+            # Set vertical axis title
+            vertical_axis_title = "signal"
     
-    #Set image size (x-pixels, y-pixels) for printing in the notebook's cell:
-    fig = plt.figure(figsize = (12, 8))
-    ax = fig.add_subplot()
-    
+        #Set image size (x-pixels, y-pixels) for printing in the notebook's cell:
+        fig = plt.figure(figsize = (12, 8))
+        ax = fig.add_subplot()
+        
     # Start a list to append all the plot dictionaries
     plots_list = []
     
@@ -166,62 +168,63 @@ def get_frequency_features (df, timestamp_tag_column, important_frequencies = [{
             sin_plot = np.array(plot_dict['plot_sin'])[:max_number_of_entries_to_plot]
             cos_plot = np.array(plot_dict['plot_cos'])[:max_number_of_entries_to_plot]
         
-        ax.plot(x_plot, sin_plot, linestyle = "-", marker = '', color = plot_dict['color_sin'], alpha = OPACITY, label = plot_dict['label_sin'])
-        ax.plot(x_plot, cos_plot, linestyle = "-", marker = '', color = plot_dict['color_cos'], alpha = OPACITY, label = plot_dict['label_cos'])
-        
+        if ControlVars.show_plots:
+            ax.plot(x_plot, sin_plot, linestyle = "-", marker = '', color = plot_dict['color_sin'], alpha = OPACITY, label = plot_dict['label_sin'])
+            ax.plot(x_plot, cos_plot, linestyle = "-", marker = '', color = plot_dict['color_cos'], alpha = OPACITY, label = plot_dict['label_cos'])
+            
         plots_list.append(plot_dict)
     
     # Add the list of plots to the returned dictionary:
     timestamp_dict['plots_list'] = plots_list
     
-    #ROTATE X AXIS IN XX DEGREES
-    plt.xticks(rotation = x_axis_rotation)
-    # XX = 0 DEGREES x_axis (Default)
-    #ROTATE Y AXIS IN XX DEGREES:
-    plt.yticks(rotation = y_axis_rotation)
-    # XX = 0 DEGREES y_axis (Default)
-
-    ax.set_title(plot_title)
-    ax.set_xlabel(horizontal_axis_title)
-    ax.set_ylabel(vertical_axis_title)
-
-    ax.grid(grid) # show grid or not
-    ax.legend(loc = 'upper right')
-    # position options: 'upper right'; 'upper left'; 'lower left'; 'lower right';
-    # 'right', 'center left'; 'center right'; 'lower center'; 'upper center', 'center'
-    # https://www.statology.org/matplotlib-legend-position/
-
-    if (export_png == True):
-        # Image will be exported
-        import os
-
-        #check if the user defined a directory path. If not, set as the default root path:
-        if (directory_to_save is None):
-            #set as the default
-            directory_to_save = ""
-
-        #check if the user defined a file name. If not, set as the default name for this
-        # function.
-        if (file_name is None):
-            #set as the default
-            file_name = "frequency_signals"
-
-        #check if the user defined an image resolution. If not, set as the default 110 dpi
-        # resolution.
-        if (png_resolution_dpi is None):
-            #set as 330 dpi
-            png_resolution_dpi = 330
-
-        #Get the new_file_path
-        new_file_path = os.path.join(directory_to_save, file_name)
-        new_file_path = new_file_path + ".png"
-        # supported formats = 'png', 'pdf', 'ps', 'eps' or 'svg'
-        #Export the file to this new path:
-        plt.savefig(new_file_path, dpi = png_resolution_dpi, transparent = False) 
-        # https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.savefig.html
-        print (f"Figure exported as \'{new_file_path}\'. Any previous file in this root path was overwritten.")
-    
     if ControlVars.show_plots:
+        #ROTATE X AXIS IN XX DEGREES
+        plt.xticks(rotation = x_axis_rotation)
+        # XX = 0 DEGREES x_axis (Default)
+        #ROTATE Y AXIS IN XX DEGREES:
+        plt.yticks(rotation = y_axis_rotation)
+        # XX = 0 DEGREES y_axis (Default)
+
+        ax.set_title(plot_title)
+        ax.set_xlabel(horizontal_axis_title)
+        ax.set_ylabel(vertical_axis_title)
+
+        ax.grid(grid) # show grid or not
+        ax.legend(loc = 'upper right')
+        # position options: 'upper right'; 'upper left'; 'lower left'; 'lower right';
+        # 'right', 'center left'; 'center right'; 'lower center'; 'upper center', 'center'
+        # https://www.statology.org/matplotlib-legend-position/
+
+        if (export_png == True):
+            # Image will be exported
+            import os
+
+            #check if the user defined a directory path. If not, set as the default root path:
+            if (directory_to_save is None):
+                #set as the default
+                directory_to_save = ""
+
+            #check if the user defined a file name. If not, set as the default name for this
+            # function.
+            if (file_name is None):
+                #set as the default
+                file_name = "frequency_signals"
+
+            #check if the user defined an image resolution. If not, set as the default 110 dpi
+            # resolution.
+            if (png_resolution_dpi is None):
+                #set as 330 dpi
+                png_resolution_dpi = 330
+
+            #Get the new_file_path
+            new_file_path = os.path.join(directory_to_save, file_name)
+            new_file_path = new_file_path + ".png"
+            # supported formats = 'png', 'pdf', 'ps', 'eps' or 'svg'
+            #Export the file to this new path:
+            plt.savefig(new_file_path, dpi = png_resolution_dpi, transparent = False) 
+            # https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.savefig.html
+            print (f"Figure exported as \'{new_file_path}\'. Any previous file in this root path was overwritten.")
+    
         #Set image size (x-pixels, y-pixels) for printing in the notebook's cell:
         #plt.figure(figsize = (12, 8))
         #fig.tight_layout()
@@ -234,6 +237,7 @@ def get_frequency_features (df, timestamp_tag_column, important_frequencies = [{
         ##  Ex_Files_Supervised_Learning, Exercise Files, lesson '03. Decision Trees', '03_05', 
         ##  '03_05_END.ipynb'
         plt.show()
+
 
     if ControlVars.show_results:
         print(f"Frequency features retrieved. Check 10 first rows from the new dataframe:\n")

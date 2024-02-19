@@ -62,7 +62,8 @@ def trim_spaces_or_characters (df, column_to_analyze, new_variable_type = None, 
     
     if (method == 'substring'):
         
-        print("ATTENTION: Operations of string strip (removal) or replacement are all case-sensitive. There must be correct correspondence between cases and spaces for the strings being removed or replaced.\n")
+        if ControlVars.show_results:
+            print("ATTENTION: Operations of string strip (removal) or replacement are all case-sensitive. There must be correct correspondence between cases and spaces for the strings being removed or replaced.\n")
         # For manipulating strings, call the str attribute and, then, the method to be applied:
         new_series = new_series.str.strip(substring_to_eliminate)
     
@@ -349,7 +350,8 @@ def replace_substring (df, column_to_analyze, substring_to_be_replaced = None, n
     DATASET[column_to_analyze] = (DATASET[column_to_analyze]).astype(str)
     new_series = DATASET[column_to_analyze].copy()
     
-    print("ATTENTION: Operations of string strip (removal) or replacement are all case-sensitive. There must be correct correspondence between cases and spaces for the strings being removed or replaced.\n")
+    if ControlVars.show_results:
+        print("ATTENTION: Operations of string strip (removal) or replacement are all case-sensitive. There must be correct correspondence between cases and spaces for the strings being removed or replaced.\n")
         
     # If one of the input substrings is None, make it the empty string:
     if (substring_to_be_replaced is None):
@@ -1069,7 +1071,8 @@ def switch_strings (df, column_to_analyze, list_of_dictionaries_with_original_st
     DATASET[column_to_analyze] = (DATASET[column_to_analyze]).astype(str)
     new_series = DATASET[column_to_analyze].copy()
     
-    print("ATTENTION: Operations of string strip (removal) or replacement are all case-sensitive. There must be correct correspondence between cases and spaces for the strings being removed or replaced.\n")
+    if ControlVars.show_results:
+        print("ATTENTION: Operations of string strip (removal) or replacement are all case-sensitive. There must be correct correspondence between cases and spaces for the strings being removed or replaced.\n")
     
     # Create the mapping dictionary for the str.replace method:
     mapping_dict = {}
