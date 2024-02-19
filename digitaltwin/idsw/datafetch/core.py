@@ -14,7 +14,7 @@ import seaborn as sns
 import openpyxl
 
 from dataclasses import dataclass
-from idsw import (InvalidInputsError, ControlVars)
+from steelindustrysimulator.digitaltwin.idsw import (InvalidInputsError, ControlVars)
 
 
 @dataclass
