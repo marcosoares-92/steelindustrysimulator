@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from .idsw.datafetch.core import InvalidInputsError
+from .idsw import (InvalidInputsError, ControlVars)
 from .idsw.etl.strings import switch_strings
 from .idsw.etl.transform import (get_frequency_features, feature_scaling)
 
@@ -147,6 +147,9 @@ def scale_features(dataset):
 def simulation_pipeline(dataset, possible_ranges, kmeans_model, encoder_decoder_tf_model):
   """Run the full data transformation and simulation pipeline."""
 
+  ControlVars.show_results = False
+  ControlVars.show_plots = False
+
   # Create copy to manipulate without risks of losing data:
   df = dataset.copy(deep = True)
   # Run the functions:
@@ -157,6 +160,7 @@ def simulation_pipeline(dataset, possible_ranges, kmeans_model, encoder_decoder_
   model_df = add_frequencies(model_df)
   model_df = encode_loadtype(model_df)
   model_df = scale_features(model_df)
+
   # Predict model output and re-scale it to kWh:
   df = prediction_pipeline(encoder_decoder_tf_model, model_df, df)
   
@@ -166,5 +170,9 @@ def simulation_pipeline(dataset, possible_ranges, kmeans_model, encoder_decoder_
   
   # Filter and re-order dataframe columns:
   df = df[columns]
+
+  ControlVars.show_results = True
+  ControlVars.show_plots = True
+  
 
   return df

@@ -28,6 +28,9 @@ def random_noise(array, std):
   https://numpy.org/doc/stable/reference/generated/numpy.matmul.html
   """
 
+  # Create a random generator for improving reproducibility
+  np.random.default_rng(seed = 55)
+
   total_elements = len(array)
   # 1. array of -1 and 1:
   pos_or_neg = np.random.choice([1, -1], total_elements, p = [0.5, 0.5])

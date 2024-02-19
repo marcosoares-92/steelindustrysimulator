@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import tensorflow as tf
 
+from .idsw import (InvalidInputsError, ControlVars)
 from .idsw.datafetch.pipes import import_export_model_list_dict
 from .idsw.modelling.preparetensors import separate_and_prepare_features_and_responses
 from .idsw.modelling.utils import make_model_predictions
@@ -159,11 +160,17 @@ def prediction_pipeline(encoder_decoder_tf_model, model_df, df):
   """Run full pipeline of preparing tensors, getting the model predictions and reconverting it
       to the appropriate kWh scale"""
 
+  ControlVars.show_results = False
+  ControlVars.show_plots = False
+
   X, RESPONSE_COLUMNS = get_tensor_for_simulation(model_df)
   model_df = get_model_predictions(encoder_decoder_tf_model, X, RESPONSE_COLUMNS, model_df)
   scaled_predictions = model_df['usage_kwh_scaled']
   model_predictions = rescale_response(scaled_predictions)
   # Add the predictions to the correct dataset:
   df['usage_kwh'] = model_predictions
+
+  ControlVars.show_results = True
+  ControlVars.show_plots = True
 
   return df

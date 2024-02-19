@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from steelindustrysimulator.digitaltwin.idsw.datafetch.core import InvalidInputsError
+from steelindustrysimulator.digitaltwin.idsw import (InvalidInputsError, ControlVars)
 
 
 def get_frequency_features (df, timestamp_tag_column, important_frequencies = [{'value': 1, 'unit': 'day'}, {'value':1, 'unit': 'year'}], x_axis_rotation = 70, y_axis_rotation = 0, grid = True, horizontal_axis_title = None, vertical_axis_title = None, plot_title = None, max_number_of_entries_to_plot = None, export_png = False, directory_to_save = None, file_name = None, png_resolution_dpi = 330):
@@ -128,6 +128,7 @@ def get_frequency_features (df, timestamp_tag_column, important_frequencies = [{
     
     # Let's put a small degree of transparency (1 - OPACITY) = 0.05 = 5%
     # so that the bars do not completely block other views.
+
     OPACITY = 0.95
     
     if (plot_title is None):
@@ -220,19 +221,31 @@ def get_frequency_features (df, timestamp_tag_column, important_frequencies = [{
         # https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.savefig.html
         print (f"Figure exported as \'{new_file_path}\'. Any previous file in this root path was overwritten.")
     
-    #Set image size (x-pixels, y-pixels) for printing in the notebook's cell:
-    #plt.figure(figsize = (12, 8))
-    #fig.tight_layout()
+    if ControlVars.show_plots:
+        #Set image size (x-pixels, y-pixels) for printing in the notebook's cell:
+        #plt.figure(figsize = (12, 8))
+        #fig.tight_layout()
 
-    ## Show an image read from an image file:
-    ## import matplotlib.image as pltimg
-    ## img=pltimg.imread('mydecisiontree.png')
-    ## imgplot = plt.imshow(img)
-    ## See linkedIn Learning course: "Supervised machine learning and the technology boom",
-    ##  Ex_Files_Supervised_Learning, Exercise Files, lesson '03. Decision Trees', '03_05', 
-    ##  '03_05_END.ipynb'
-    plt.show()
-    
+        ## Show an image read from an image file:
+        ## import matplotlib.image as pltimg
+        ## img=pltimg.imread('mydecisiontree.png')
+        ## imgplot = plt.imshow(img)
+        ## See linkedIn Learning course: "Supervised machine learning and the technology boom",
+        ##  Ex_Files_Supervised_Learning, Exercise Files, lesson '03. Decision Trees', '03_05', 
+        ##  '03_05_END.ipynb'
+        plt.show()
+
+    if ControlVars.show_results:
+        print(f"Frequency features retrieved. Check 10 first rows from the new dataframe:\n")
+        
+        try:
+            # only works in Jupyter Notebook:
+            from IPython.display import display
+            display(DATASET.head(10))
+                
+        except: # regular mode
+            print(DATASET.head(10))
+
     return DATASET, timestamp_dict
 
 
@@ -344,15 +357,16 @@ def log_transform (df, subset = None, create_new_columns = True, add_constant = 
     # Reset the index:
     DATASET.reset_index(drop = True)
     
-    print(f"The columns X were successfully log-transformed as log(X + {constant_to_add:.6f}). Check the 10 first rows of the new dataset:\n")
-    
-    try:
-        # only works in Jupyter Notebook:
-        from IPython.display import display
-        display(DATASET.head(10))
-            
-    except: # regular mode
-        print(DATASET.head(10))
+    if ControlVars.show_results:
+        print(f"The columns X were successfully log-transformed as log(X + {constant_to_add:.6f}). Check the 10 first rows of the new dataset:\n")
+        
+        try:
+            # only works in Jupyter Notebook:
+            from IPython.display import display
+            display(DATASET.head(10))
+                
+        except: # regular mode
+            print(DATASET.head(10))
     
     return DATASET
 
@@ -456,16 +470,17 @@ def reverse_log_transform (df, subset = None, create_new_columns = True, added_c
         # Calculate the column value as the log transform of the original series (column)
         DATASET[new_column_name] = np.exp(np.array(DATASET[column])) - added_constant
     
-    print("The log_transform was successfully reversed through the exponential transformation. Check the 10 first rows of the new dataset:\n")
-    
-    try:
-        # only works in Jupyter Notebook:
-        from IPython.display import display
-        display(DATASET.head(10))
-            
-    except: # regular mode
-        print(DATASET.head(10))
-    
+    if ControlVars.show_results:
+        print("The log_transform was successfully reversed through the exponential transformation. Check the 10 first rows of the new dataset:\n")
+        
+        try:
+            # only works in Jupyter Notebook:
+            from IPython.display import display
+            display(DATASET.head(10))
+                
+        except: # regular mode
+            print(DATASET.head(10))
+        
     return DATASET
 
 
@@ -602,17 +617,18 @@ def box_cox_transform (df, column_to_transform, add_constant = False, constant_t
     DATASET[new_col] = y_transform
     #dataframe contendo os dados transformados
     
-    print("Data successfully transformed. Check the 10 first transformed rows:\n")
-    
-    try:
-        # only works in Jupyter Notebook:
-        from IPython.display import display
-        display(DATASET.head(10))
-            
-    except: # regular mode
-        print(DATASET.head(10))
+    if ControlVars.show_results:
+        print("Data successfully transformed. Check the 10 first transformed rows:\n")
         
-    print("\n") #line break
+        try:
+            # only works in Jupyter Notebook:
+            from IPython.display import display
+            display(DATASET.head(10))
+                
+        except: # regular mode
+            print(DATASET.head(10))
+            
+        print("\n") #line break
     
     # Start a dictionary to store the summary results of the transform and the normality
     # tests:
@@ -640,13 +656,14 @@ def box_cox_transform (df, column_to_transform, add_constant = False, constant_t
     ad_test = diagnostic.normal_ad(y_transform, axis = 0)
     data_sum_dict['anderson_darling_p_val'] = ad_test[1]
     
-    print("Box-Cox Transformation Summary:\n")
-    try:
-        display(data_sum_dict)     
-    except:
-        print(data_sum_dict)
-    
-    print("\n") #line break
+    if ControlVars.show_results:
+        print("Box-Cox Transformation Summary:\n")
+        try:
+            display(data_sum_dict)     
+        except:
+            print(data_sum_dict)
+        
+        print("\n") #line break
     
     if not ((specification_limits['lower_spec_lim'] is None) & (specification_limits['upper_spec_lim'] is None)):
         # Convert it to a list of specs:
@@ -702,11 +719,12 @@ def box_cox_transform (df, column_to_transform, add_constant = False, constant_t
             # it to the dictionary:
             spec_lim_dict['upper_spec_lim_transf'] = spec_lim_array[0]
         
-        print("New specification limits successfully obtained:\n")
-        try:
-            display(spec_lim_dict)     
-        except:
-            print(spec_lim_dict)
+        if ControlVars.show_results:
+            print("New specification limits successfully obtained:\n")
+            try:
+                display(spec_lim_dict)     
+            except:
+                print(spec_lim_dict)
         
         # Add spec_lim_dict as a new element from data_sum_dict:
         data_sum_dict['spec_lim_dict'] = spec_lim_dict
@@ -790,17 +808,18 @@ def reverse_box_cox (df, column_to_transform, lambda_boxcox, added_constant = 0,
     DATASET[new_col] = y_transform
     #dataframe contendo os dados transformados
     
-    print("Data successfully retransformed. Check the 10 first retransformed rows:\n")
-    
-    try:
-        # only works in Jupyter Notebook:
-        from IPython.display import display
-        display(DATASET.head(10))
-            
-    except: # regular mode
-        print(DATASET.head(10))
-    
-    print("\n") #line break
+    if ControlVars.show_results:
+        print("Data successfully retransformed. Check the 10 first retransformed rows:\n")
+        
+        try:
+            # only works in Jupyter Notebook:
+            from IPython.display import display
+            display(DATASET.head(10))
+                
+        except: # regular mode
+            print(DATASET.head(10))
+        
+        print("\n") #line break
 
     return DATASET
 
@@ -913,15 +932,16 @@ def square_root_transform (df, subset = None, create_new_columns = True, add_con
     # Reset the index:
     DATASET.reset_index(drop = True)
     
-    print(f"The columns X were successfully transformed as square_root(X + {constant_to_add:.6f}). Check the 10 first rows of the new dataset:\n")
-    
-    try:
-        # only works in Jupyter Notebook:
-        from IPython.display import display
-        display(DATASET.head(10))
-            
-    except: # regular mode
-        print(DATASET.head(10))
+    if ControlVars.show_results:
+        print(f"The columns X were successfully transformed as square_root(X + {constant_to_add:.6f}). Check the 10 first rows of the new dataset:\n")
+        
+        try:
+            # only works in Jupyter Notebook:
+            from IPython.display import display
+            display(DATASET.head(10))
+                
+        except: # regular mode
+            print(DATASET.head(10))
     
     return DATASET
 
@@ -1012,15 +1032,16 @@ def reverse_square_root_transform (df, subset = None, create_new_columns = True,
         # Calculate the column value as the log transform of the original series (column)
         DATASET[new_column_name] = np.power(np.array(DATASET[column]), 2) - added_constant
     
-    print("The square root transform was successfully reversed through the power transformation. Check the 10 first rows of the new dataset:\n")
-    
-    try:
-        # only works in Jupyter Notebook:
-        from IPython.display import display
-        display(DATASET.head(10))
-            
-    except: # regular mode
-        print(DATASET.head(10))
+    if ControlVars.show_results:
+        print("The square root transform was successfully reversed through the power transformation. Check the 10 first rows of the new dataset:\n")
+        
+        try:
+            # only works in Jupyter Notebook:
+            from IPython.display import display
+            display(DATASET.head(10))
+                
+        except: # regular mode
+            print(DATASET.head(10))
     
     return DATASET
 
@@ -1111,15 +1132,16 @@ def cube_root_transform (df, subset = None, create_new_columns = True, add_const
     # Reset the index:
     DATASET.reset_index(drop = True)
     
-    print(f"The columns X were successfully transformed as cube_root(X + {constant_to_add:.6f}). Check the 10 first rows of the new dataset:\n")
-    
-    try:
-        # only works in Jupyter Notebook:
-        from IPython.display import display
-        display(DATASET.head(10))
-            
-    except: # regular mode
-        print(DATASET.head(10))
+    if ControlVars.show_results:
+        print(f"The columns X were successfully transformed as cube_root(X + {constant_to_add:.6f}). Check the 10 first rows of the new dataset:\n")
+        
+        try:
+            # only works in Jupyter Notebook:
+            from IPython.display import display
+            display(DATASET.head(10))
+                
+        except: # regular mode
+            print(DATASET.head(10))
     
     return DATASET
 
@@ -1210,15 +1232,16 @@ def reverse_cube_root_transform (df, subset = None, create_new_columns = True, a
         # Calculate the column value as the log transform of the original series (column)
         DATASET[new_column_name] = np.power(np.array(DATASET[column]), 3) - added_constant
     
-    print("The cube root transform was successfully reversed through the power transformation. Check the 10 first rows of the new dataset:\n")
-    
-    try:
-        # only works in Jupyter Notebook:
-        from IPython.display import display
-        display(DATASET.head(10))
-            
-    except: # regular mode
-        print(DATASET.head(10))
+    if ControlVars.show_results:
+        print("The cube root transform was successfully reversed through the power transformation. Check the 10 first rows of the new dataset:\n")
+        
+        try:
+            # only works in Jupyter Notebook:
+            from IPython.display import display
+            display(DATASET.head(10))
+                
+        except: # regular mode
+            print(DATASET.head(10))
     
     return DATASET
 
@@ -1349,15 +1372,16 @@ def power_transform (df, exponent = 2, subset = None, create_new_columns = True,
     # Reset the index:
     DATASET.reset_index(drop = True)
     
-    print(f"The columns X were successfully transformed as (X + {constant_to_add:.6f})^{exponent:.6f}. Check the 10 first rows of the new dataset:\n")
-    
-    try:
-        # only works in Jupyter Notebook:
-        from IPython.display import display
-        display(DATASET.head(10))
-            
-    except: # regular mode
-        print(DATASET.head(10))
+    if ControlVars.show_results:
+        print(f"The columns X were successfully transformed as (X + {constant_to_add:.6f})^{exponent:.6f}. Check the 10 first rows of the new dataset:\n")
+        
+        try:
+            # only works in Jupyter Notebook:
+            from IPython.display import display
+            display(DATASET.head(10))
+                
+        except: # regular mode
+            print(DATASET.head(10))
     
     return DATASET
 
@@ -1475,15 +1499,16 @@ def reverse_power_transform (df, original_exponent = 2, subset = None, create_ne
         # Calculate the column value as the log transform of the original series (column)
         DATASET[new_column_name] = (np.array(DATASET[column]))**exponent - added_constant
     
-    print("The power was successfully reversed through the exponential transformation. Check the 10 first rows of the new dataset:\n")
-    
-    try:
-        # only works in Jupyter Notebook:
-        from IPython.display import display
-        display(DATASET.head(10))
-            
-    except: # regular mode
-        print(DATASET.head(10))
+    if ControlVars.show_results:
+        print("The power was successfully reversed through the exponential transformation. Check the 10 first rows of the new dataset:\n")
+        
+        try:
+            # only works in Jupyter Notebook:
+            from IPython.display import display
+            display(DATASET.head(10))
+                
+        except: # regular mode
+            print(DATASET.head(10))
     
     return DATASET
 
@@ -1637,29 +1662,31 @@ def OneHotEncoding_df (df, subset_of_features_to_be_encoded):
         # and the total of columns will be the sum of the total of columns of
         # the first dataframe with the total of columns of the second dataframe.
         
-        print(f"Successfully encoded column \'{column}\' and merged the encoded columns to the dataframe.\n")
-        print("Check first 5 rows of the encoded table that was merged:\n")
+        if ControlVars.show_results:
+            print(f"Successfully encoded column \'{column}\' and merged the encoded columns to the dataframe.\n")
+            print("Check first 5 rows of the encoded table that was merged:\n")
+            
+            try:
+                display(encoded_X_df.head())
+            except: # regular mode
+                print(encoded_X_df.head())
+            
+            # The default of the head method, when no parameter is printed, is to show 5 rows; if an
+            # integer number Y is passed as argument .head(Y), Pandas shows the first Y-rows.
+            print("\n")
+
+    if ControlVars.show_results: 
+        print("Finished One-Hot Encoding. Returning the new transformed dataframe; and an encoding list.\n")
+        print("Each element from this list is a dictionary with the original column name as key \'column\', and a nested dictionary as the key \'OneHot_encoder\'.\n")
+        print("In turns, the nested dictionary shows the different categories as key \'categories\' and the encoder object as the key \'OneHot_enc_obj\'.\n")
+        print("Use the encoder object to inverse the One-Hot Encoding in the correspondent function.\n")
+        print(f"For each category in the columns \'{subset_of_features_to_be_encoded}\', a new column has value 1, if it is the actual category of that row; or is 0 if not.\n")
+        print("Check the first 10 rows of the new dataframe:\n")
         
         try:
-            display(encoded_X_df.head())
-        except: # regular mode
-            print(encoded_X_df.head())
-        
-        # The default of the head method, when no parameter is printed, is to show 5 rows; if an
-        # integer number Y is passed as argument .head(Y), Pandas shows the first Y-rows.
-        print("\n")
-        
-    print("Finished One-Hot Encoding. Returning the new transformed dataframe; and an encoding list.\n")
-    print("Each element from this list is a dictionary with the original column name as key \'column\', and a nested dictionary as the key \'OneHot_encoder\'.\n")
-    print("In turns, the nested dictionary shows the different categories as key \'categories\' and the encoder object as the key \'OneHot_enc_obj\'.\n")
-    print("Use the encoder object to inverse the One-Hot Encoding in the correspondent function.\n")
-    print(f"For each category in the columns \'{subset_of_features_to_be_encoded}\', a new column has value 1, if it is the actual category of that row; or is 0 if not.\n")
-    print("Check the first 10 rows of the new dataframe:\n")
-    
-    try:
-        display(new_df.head(10))
-    except:
-        print(new_df.head(10))
+            display(new_df.head(10))
+        except:
+            print(new_df.head(10))
 
     #return the transformed dataframe and the encoding dictionary:
     return new_df, encoding_list
@@ -1793,7 +1820,7 @@ def reverse_OneHotEncoding (df, encoding_list):
                     i = i + 1
 
                 except:
-                    print("Detected dictionary with incorrect keys or format. Unable to reverse encoding. Please, correct it.\n")
+                    raise InvalidInputsError("Detected dictionary with incorrect keys or format. Unable to reverse encoding. Please, correct it.\n")
         
         except:
             
@@ -1891,35 +1918,37 @@ def reverse_OneHotEncoding (df, encoding_list):
                         # Add the reversed array as the column col_name on the dataframe:
                         new_df[col_name] = reversed_array
                         
-                        print(f"Reversed the encoding for {col_name}. Check the 5 first rows of the re-transformed series:\n")
-                        
-                        try:
-                            display(new_df[[col_name]].head())
-                        except:
-                            print(new_df[[col_name]].head())
-                        
-                        print("\n")
+                        if ControlVars.show_results:
+                            print(f"Reversed the encoding for {col_name}. Check the 5 first rows of the re-transformed series:\n")
+                            
+                            try:
+                                display(new_df[[col_name]].head())
+                            except:
+                                print(new_df[[col_name]].head())
+                            
+                            print("\n")
                             # Update the counter, since a valid encoder was accessed:
                         i = i + 1
                     
                     except:
-                        print("Detected dictionary with incorrect keys or format. Unable to reverse encoding. Please, correct it.\n")
+                        raise InvalidInputsError("Detected dictionary with incorrect keys or format. Unable to reverse encoding. Please, correct it.\n")
                 
         
             except:
-                print("Detected dictionary with incorrect keys or format. Unable to reverse encoding. Please, correct it.\n")
+                raise InvalidInputsError("Detected dictionary with incorrect keys or format. Unable to reverse encoding. Please, correct it.\n")
         
 
-    print("Finished reversing One-Hot Encoding. Returning the new transformed dataframe.\n")
-    print("Check the first 10 rows of the new dataframe:\n")
-    
-    try:
-        # only works in Jupyter Notebook:
-        from IPython.display import display
-        display(new_df.head(10))
-            
-    except: # regular mode
-        print(new_df.head(10))
+    if ControlVars.show_results:
+        print("Finished reversing One-Hot Encoding. Returning the new transformed dataframe.\n")
+        print("Check the first 10 rows of the new dataframe:\n")
+        
+        try:
+            # only works in Jupyter Notebook:
+            from IPython.display import display
+            display(new_df.head(10))
+                
+        except: # regular mode
+            print(new_df.head(10))
 
     #return the transformed dataframe:
     return new_df
@@ -2031,28 +2060,31 @@ def OrdinalEncoding_df (df, subset_of_features_to_be_encoded):
         # Append the encoding_dict as an element from list encoding_list:
         encoding_list.append(encoding_dict)
         
-        print(f"Successfully encoded column \'{column}\' and added the encoded column to the dataframe.\n")
-        print("Check first 5 rows of the encoded series that was merged:\n")
+        if ControlVars.show_results:
+            print(f"Successfully encoded column \'{column}\' and added the encoded column to the dataframe.\n")
+            print("Check first 5 rows of the encoded series that was merged:\n")
+            
+            try:
+                display(new_df[[new_column]].head())
+            except:
+                print(new_df[[new_column]].head())
+            
+            # The default of the head method, when no parameter is printed, is to show 5 rows; if an
+            # integer number Y is passed as argument .head(Y), Pandas shows the first Y-rows.
+            print("\n")
+        
+    
+    if ControlVars.show_results:
+        print("Finished Ordinal Encoding. Returning the new transformed dataframe; and an encoding list.\n")
+        print("Each element from this list is a dictionary with the original column name as key \'column\', and a nested dictionary as the key \'ordinal_encoder\'.\n")
+        print("In turns, the nested dictionary shows the different categories as key \'categories\' and the encoder object as the key \'ordinal_enc_obj\'.\n")
+        print("Use the encoder object to inverse the Ordinal Encoding in the correspondent function.\n")
+        print("Check the first 10 rows of the new dataframe:\n")
         
         try:
-            display(new_df[[new_column]].head())
+            display(new_df.head(10))
         except:
-            print(new_df[[new_column]].head())
-        
-        # The default of the head method, when no parameter is printed, is to show 5 rows; if an
-        # integer number Y is passed as argument .head(Y), Pandas shows the first Y-rows.
-        print("\n")
-        
-    print("Finished Ordinal Encoding. Returning the new transformed dataframe; and an encoding list.\n")
-    print("Each element from this list is a dictionary with the original column name as key \'column\', and a nested dictionary as the key \'ordinal_encoder\'.\n")
-    print("In turns, the nested dictionary shows the different categories as key \'categories\' and the encoder object as the key \'ordinal_enc_obj\'.\n")
-    print("Use the encoder object to inverse the Ordinal Encoding in the correspondent function.\n")
-    print("Check the first 10 rows of the new dataframe:\n")
-    
-    try:
-        display(new_df.head(10))
-    except:
-        print(new_df.head(10))
+            print(new_df.head(10))
     
     #return the transformed dataframe and the encoding dictionary:
     return new_df, encoding_list
@@ -2249,27 +2281,29 @@ def reverse_OrdinalEncoding (df, encoding_list):
                 
                 # Add the reversed array as the column col_name on the dataframe:
                 new_df[col_name] = reversed_array
-                        
-                print(f"Reversed the encoding for {col_name}. Check the 5 first rows of the re-transformed series:\n")
-                    
-                try:
-                    display(new_df[[col_name]].head())
-                except:
-                    print(new_df[[col_name]].head())
 
-                print("\n")
+                if ControlVars.show_results:   
+                    print(f"Reversed the encoding for {col_name}. Check the 5 first rows of the re-transformed series:\n")
+                        
+                    try:
+                        display(new_df[[col_name]].head())
+                    except:
+                        print(new_df[[col_name]].head())
+
+                    print("\n")
         
         except:
-            print("Detected dictionary with incorrect keys or format. Unable to reverse encoding. Please, correct it.\n")
+            raise InvalidInputsError("Detected dictionary with incorrect keys or format. Unable to reverse encoding. Please, correct it.\n")
     
     
-    print("Finished reversing Ordinal Encoding. Returning the new transformed dataframe.\n")
-    print("Check the first 10 rows of the new dataframe:\n")
-    
-    try:
-        display(new_df.head(10))
-    except:
-        print(new_df.head(10))
+    if ControlVars.show_results:
+        print("Finished reversing Ordinal Encoding. Returning the new transformed dataframe.\n")
+        print("Check the first 10 rows of the new dataframe:\n")
+        
+        try:
+            display(new_df.head(10))
+        except:
+            print(new_df.head(10))
 
     #return the transformed dataframe:
     return new_df
@@ -2531,19 +2565,21 @@ def feature_scaling (df, subset_of_features_to_scale, mode = 'min_max', scale_wi
                 
         # Finally, append the scaling_dict to the list scaling_list:
         scaling_list.append(scaling_dict)
-                    
-        print(f"Successfully scaled column {column}.\n")
+
+        if ControlVars.show_results:       
+            print(f"Successfully scaled column {column}.\n")
+
+    if ControlVars.show_results:          
+        print("Successfully scaled the dataframe. Returning the transformed dataframe and the scaling dictionary.\n")
+        print("Check 10 first rows of the new dataframe:\n")
+        
+        try:
+            # only works in Jupyter Notebook:
+            from IPython.display import display
+            display(new_df.head(10))
                 
-    print("Successfully scaled the dataframe. Returning the transformed dataframe and the scaling dictionary.\n")
-    print("Check 10 first rows of the new dataframe:\n")
-    
-    try:
-        # only works in Jupyter Notebook:
-        from IPython.display import display
-        display(new_df.head(10))
-            
-    except: # regular mode
-        print(new_df.head(10))
+        except: # regular mode
+            print(new_df.head(10))
 
     return new_df, scaling_list
 
@@ -2728,18 +2764,20 @@ def reverse_feature_scaling (df, subset_of_features_to_scale, list_of_scaling_pa
 
                 # Finally, append the scaling_dict to the list scaling_list:
                 scaling_list.append(scaling_dict)
-
-                print(f"Successfully re-scaled column {column}.\n")
                 
-    print("Successfully re-scaled the dataframe.\n")
-    print("Check 10 first rows of the new dataframe:\n")
-    
-    try:
-        # only works in Jupyter Notebook:
-        from IPython.display import display
-        display(new_df.head(10))
-            
-    except: # regular mode
-        print(new_df.head(10))
+                if ControlVars.show_results:
+                    print(f"Successfully re-scaled column {column}.\n")
+
+    if ControlVars.show_results:     
+        print("Successfully re-scaled the dataframe.\n")
+        print("Check 10 first rows of the new dataframe:\n")
+        
+        try:
+            # only works in Jupyter Notebook:
+            from IPython.display import display
+            display(new_df.head(10))
+                
+        except: # regular mode
+            print(new_df.head(10))
                 
     return new_df, scaling_list

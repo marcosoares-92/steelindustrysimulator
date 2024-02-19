@@ -3,7 +3,7 @@ from datetime import datetime
 import numpy as np
 import pandas as pd
 
-from .idsw.datafetch.core import InvalidInputsError
+from .idsw import (InvalidInputsError, ControlVars)
 from .idsw.datafetch.pipes import upload_to_or_download_file_from_colab, export_pd_dataframe_as_excel
 from .idsw.etl.characterize import time_series_vis
 
@@ -146,6 +146,10 @@ def run_simulation(var1, var2, var3, var4, var5, var6, var7, var8):
   : params var1, var2, var3, var4, var5, var6, var7, var8: user defined parameters.
   """
 
+  
+  ControlVars.show_results = False
+  ControlVars.show_plots = False
+  
   # Get initial dataframe with user defined inputs:
   sim_df = update_with_inputs(var1, var2, var3, var4, var5, var6, var7, var8)
   # Run simulation pipeline:
@@ -242,6 +246,9 @@ def run_simulation(var1, var2, var3, var4, var5, var6, var7, var8):
 
   # Finally, update the list:
   GlobalVars.exported_tables = exported_tables
+  
+  ControlVars.show_results = True
+  ControlVars.show_plots = True
   
 
   print(completion_msg)
