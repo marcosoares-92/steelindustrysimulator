@@ -1,5 +1,5 @@
 # STEEL INDUSTRY DIGITAL TWIN
-## Simulate an steel industry energy consume using Deep Learning.
+## Simulate a steel industry energy consume using Deep Learning.
 
 #### The digital twin is designed to reproduce the behavior from a DAEWOO Steel Co. Ltd facility in Gwangyang, South Korea, which made its data public.
 
