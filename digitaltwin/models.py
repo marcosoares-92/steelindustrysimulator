@@ -53,7 +53,7 @@ def load_models():
   kmeans_model = import_export_model_list_dict (action = ACTION, objects_manipulated = OBJECTS_MANIPULATED, model_file_name = MODEL_FILE_NAME, dictionary_or_list_file_name = DICTIONARY_OR_LIST_FILE_NAME, directory_path = DIRECTORY_PATH, model_type = MODEL_TYPE, dict_or_list_to_export = DICT_OR_LIST_TO_EXPORT, model_to_export = MODEL_TO_EXPORT, use_colab_memory = USE_COLAB_MEMORY) 
 
   # Deep learning encoder-decoder model:
-  model_path = "steelindustrysimulator/digitaltwin/data/encoder_decoder_tf_model.keras"
+  model_path = "steelindustrysimulator/digitaltwin/data/encoder_decoder_tf_model/saved_model"
   encoder_decoder_tf_model = tf.keras.models.load_model(model_path)
   print(f"Keras/TensorFlow model successfully imported from {model_path}.")
 
