@@ -20,6 +20,9 @@ marco.soares@bayer.com
 from subprocess import Popen, PIPE, TimeoutExpired
 
 proc = Popen(["python", "-m", "pip", "install", "scikit-learn==1.3.1"], stdout = PIPE, stderr = PIPE)
+
+proc2 = Popen(["python", "-m", "pip", "install", "tensorflow==2.14.0"], stdout = PIPE, stderr = PIPE)
+
 start_msg = """  
     ----------------------------------------------------------------------
                       STEEL INDUSTRY DIGITAL TWIN TERMINAL
@@ -36,6 +39,12 @@ try:
 except:
     # General exception
     output, error = proc.communicate()
+
+try:
+    output, error = proc2.communicate(timeout = 30)
+except:
+    # General exception
+    output, error = proc2.communicate()
         
 print(start_msg)
     
