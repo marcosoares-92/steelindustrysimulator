@@ -19,9 +19,14 @@ marco.soares@bayer.com
 
 from subprocess import Popen, PIPE, TimeoutExpired
 
+# Lock the appropriate Python versions for preventing the simulator from stopping.
 proc = Popen(["python", "-m", "pip", "install", "scikit-learn==1.3.1"], stdout = PIPE, stderr = PIPE)
-
 proc2 = Popen(["python", "-m", "pip", "install", "tensorflow==2.14.0"], stdout = PIPE, stderr = PIPE)
+proc3 = Popen(["python", "-m", "pip", "install", "numpy==1.24.4"], stdout = PIPE, stderr = PIPE)
+proc4 = Popen(["python", "-m", "pip", "install", "pandas==2.1.1"], stdout = PIPE, stderr = PIPE)
+proc5 = Popen(["python", "-m", "pip", "install", "scipy==1.11.3"], stdout = PIPE, stderr = PIPE)
+proc6 = Popen(["python", "-m", "pip", "install", "statsmodels==0.14.0"], stdout = PIPE, stderr = PIPE)
+proc7 = Popen(["python", "-m", "pip", "install", "matplotlib==3.8.0"], stdout = PIPE, stderr = PIPE)
 
 start_msg = """  
     ----------------------------------------------------------------------
