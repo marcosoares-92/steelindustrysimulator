@@ -17,68 +17,6 @@ marco.soares@bayer.com
     ! python -m pip install scikit-learn==1.3.1
 """
 
-from subprocess import Popen, PIPE, TimeoutExpired
-
-
-# Lock the appropriate Python versions for preventing the simulator from stopping.
-proc1 = Popen(["python", "-m", "pip", "install", "numpy==1.26.4"], stdout = PIPE, stderr = PIPE)
-proc2 = Popen(["python", "-m", "pip", "install", "pandas==2.1.4"], stdout = PIPE, stderr = PIPE)
-proc3 = Popen(["python", "-m", "pip", "install", "scikit-learn==1.3.1"], stdout = PIPE, stderr = PIPE)
-proc4 = Popen(["python", "-m", "pip", "install", "tensorflow==2.14.0"], stdout = PIPE, stderr = PIPE)
-proc5 = Popen(["python", "-m", "pip", "install", "scipy==1.11.3"], stdout = PIPE, stderr = PIPE)
-proc6 = Popen(["python", "-m", "pip", "install", "statsmodels==0.14.0"], stdout = PIPE, stderr = PIPE)
-proc7 = Popen(["python", "-m", "pip", "install", "matplotlib==3.8.0"], stdout = PIPE, stderr = PIPE)
-
-start_msg = """  
-    ----------------------------------------------------------------------
-                      STEEL INDUSTRY DIGITAL TWIN TERMINAL
-
-
-    Updating Digital Twin system...
-        
-    ------------------------------------------------------------------------
-
-    """
-
-# RUN PROCESSES FOR INSTALLING CORRECT VERSIONS
-output1, error1 = proc1.communicate()
-output2, error2 = proc2.communicate()
-output3, error3 = proc3.communicate()
-output4, error4 = proc4.communicate()
-output5, error5 = proc5.communicate()
-output6, error6 = proc6.communicate()
-output7, error7 = proc7.communicate()
-
-print(start_msg)
-
-import numpy as np
-import pandas as pd
-import sklearn
-import tensorflow as tf
-import scipy
-import statsmodels
-import matplotlib
-
-msg = """
- 
-    ----------------------------------------------------------------------
-                      STEEL INDUSTRY DIGITAL TWIN TERMINAL
-        
-                                    WARNING!
-
-        System update failed. If the digital twin do not work properly, 
-        run a cell declaring:
-
-                        ! pip install sklearn==1.3.1 
-
-    ------------------------------------------------------------------------
-
-    """
-
-if ((sklearn.__version__) != '1.3.1'):
-    # Scikit-learn was not updated.
-    print(msg)
-
 # Now, import the modules
 
 from .core import (
