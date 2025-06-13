@@ -52,8 +52,8 @@ except:
     output, error = proc2.communicate()
         
 print(start_msg)
-    
-# import sklearn
+
+
 msg = """
  
     ----------------------------------------------------------------------
@@ -69,10 +69,6 @@ msg = """
     ------------------------------------------------------------------------
 
     """
-
-if ((sklearn.__version__) != '1.3.1'):
-    # Scikit-learn was not updated.
-    print(msg)
 
 # Now, import the modules
 
