@@ -39,6 +39,7 @@ start_msg = """
 
     """
 
+# RUN PROCESSES FOR INSTALLING CORRECT VERSIONS
 try:
     output, error = proc.communicate(timeout = 30)
 except:
@@ -50,10 +51,42 @@ try:
 except:
     # General exception
     output, error = proc2.communicate()
-        
+
+try:
+    output, error = proc3.communicate(timeout = 30)
+except:
+    # General exception
+    output, error = proc3.communicate()
+
+try:
+    output, error = proc4.communicate(timeout = 30)
+except:
+    # General exception
+    output, error = proc4.communicate()
+
+try:
+    output, error = proc5.communicate(timeout = 30)
+except:
+    # General exception
+    output, error = proc5.communicate()
+
+try:
+    output, error = proc6.communicate(timeout = 30)
+except:
+    # General exception
+    output, error = proc6.communicate()
+
+
+try:
+    output, error = proc7.communicate(timeout = 30)
+except:
+    # General exception
+    output, error = proc7.communicate()
+
+
 print(start_msg)
 
-
+import sklearn
 msg = """
  
     ----------------------------------------------------------------------
@@ -69,6 +102,10 @@ msg = """
     ------------------------------------------------------------------------
 
     """
+
+if ((sklearn.__version__) != '1.3.1'):
+    # Scikit-learn was not updated.
+    print(msg)
 
 # Now, import the modules
 
