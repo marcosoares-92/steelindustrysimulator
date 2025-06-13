@@ -53,7 +53,7 @@ except:
         
 print(start_msg)
     
-import sklearn
+# import sklearn
 msg = """
  
     ----------------------------------------------------------------------
