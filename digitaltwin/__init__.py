@@ -21,9 +21,9 @@ from subprocess import Popen, PIPE, TimeoutExpired
 
 
 # Lock the appropriate Python versions for preventing the simulator from stopping.
-proc = Popen(["python", "-m", "pip", "install", "scikit-learn==1.3.1"], stdout = PIPE, stderr = PIPE)
-proc2 = Popen(["python", "-m", "pip", "install", "numpy==1.26.4"], stdout = PIPE, stderr = PIPE)
-proc3 = Popen(["python", "-m", "pip", "install", "pandas==2.1.4"], stdout = PIPE, stderr = PIPE)
+proc1 = Popen(["python", "-m", "pip", "install", "numpy==1.26.4"], stdout = PIPE, stderr = PIPE)
+proc2 = Popen(["python", "-m", "pip", "install", "pandas==2.1.4"], stdout = PIPE, stderr = PIPE)
+proc3 = Popen(["python", "-m", "pip", "install", "scikit-learn==1.3.1"], stdout = PIPE, stderr = PIPE)
 proc4 = Popen(["python", "-m", "pip", "install", "tensorflow==2.14.0"], stdout = PIPE, stderr = PIPE)
 proc5 = Popen(["python", "-m", "pip", "install", "scipy==1.11.3"], stdout = PIPE, stderr = PIPE)
 proc6 = Popen(["python", "-m", "pip", "install", "statsmodels==0.14.0"], stdout = PIPE, stderr = PIPE)
@@ -41,7 +41,7 @@ start_msg = """
     """
 
 # RUN PROCESSES FOR INSTALLING CORRECT VERSIONS
-output, error = proc.communicate()
+output1, error1 = proc1.communicate()
 output2, error2 = proc2.communicate()
 output3, error3 = proc3.communicate()
 output4, error4 = proc4.communicate()
